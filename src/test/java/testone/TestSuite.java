@@ -8,6 +8,8 @@ enum HTTPMethod {
 	POST;
 }
 
+// Test Suite Class
+
 public class TestSuite {
 	
 	 int id;
