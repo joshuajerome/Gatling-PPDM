@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eclipse-userlibraries>
+  <library name="Maven: io.netty:netty-resolver:4.1.65.Final">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/netty/netty-resolver/4.1.65.Final/netty-resolver-4.1.65.Final.jar" />
+  </library>
+  <library name="Maven: io.netty:netty-handler:4.1.65.Final">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/netty/netty-handler/4.1.65.Final/netty-handler-4.1.65.Final.jar" />
+  </library>
+  <library name="Maven: io.netty:netty-transport:4.1.65.Final">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/netty/netty-transport/4.1.65.Final/netty-transport-4.1.65.Final.jar" />
+  </library>
+  <library name="Maven: io.netty:netty-transport-native-epoll:linux-x86_64:4.1.65.Final">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/netty/netty-transport-native-epoll/4.1.65.Final/netty-transport-native-epoll-4.1.65.Final-linux-x86_64.jar" />
+  </library>
+  <library name="Maven: io.netty:netty-codec-http:4.1.65.Final">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/netty/netty-codec-http/4.1.65.Final/netty-codec-http-4.1.65.Final.jar" />
+  </library>
+  <library name="Maven: com.aayushatharva.brotli4j:native-linux-x86_64:1.4.2">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/com/aayushatharva/brotli4j/native-linux-x86_64/1.4.2/native-linux-x86_64-1.4.2.jar" />
+  </library>
+  <library name="Maven: io.netty:netty-common:4.1.65.Final">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/netty/netty-common/4.1.65.Final/netty-common-4.1.65.Final.jar" />
+  </library>
+  <library name="Maven: com.aayushatharva.brotli4j:brotli4j:1.4.2">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/com/aayushatharva/brotli4j/brotli4j/1.4.2/brotli4j-1.4.2.jar" />
+  </library>
+  <library name="Maven: io.gatling:gatling-jsonpath:3.6.1">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/gatling/gatling-jsonpath/3.6.1/gatling-jsonpath-3.6.1.jar" />
+  </library>
+  <library name="Maven: io.gatling:gatling-jdbc:3.6.1">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/gatling/gatling-jdbc/3.6.1/gatling-jdbc-3.6.1.jar" />
+  </library>
+  <library name="Maven: io.gatling:gatling-redis:3.6.1">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/gatling/gatling-redis/3.6.1/gatling-redis-3.6.1.jar" />
+  </library>
+  <library name="Maven: io.gatling:gatling-netty-util:3.6.1">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/gatling/gatling-netty-util/3.6.1/gatling-netty-util-3.6.1.jar" />
+  </library>
+  <library name="Maven: io.gatling:gatling-commons-shared:3.6.1">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/gatling/gatling-commons-shared/3.6.1/gatling-commons-shared-3.6.1.jar" />
+  </library>
+  <library name="Maven: io.gatling:gatling-charts:3.6.1">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/gatling/gatling-charts/3.6.1/gatling-charts-3.6.1.jar" />
+  </library>
+  <library name="Maven: io.gatling:gatling-http-client:3.6.1">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/gatling/gatling-http-client/3.6.1/gatling-http-client-3.6.1.jar" />
+  </library>
+  <library name="Maven: io.gatling:gatling-core:3.6.1">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/gatling/gatling-core/3.6.1/gatling-core-3.6.1.jar" />
+  </library>
+  <library name="Maven: com.typesafe.scala-logging:scala-logging_2.13:3.9.4">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/com/typesafe/scala-logging/scala-logging_2.13/3.9.4/scala-logging_2.13-3.9.4.jar" />
+  </library>
+  <library name="Maven: com.typesafe.akka:akka-actor_2.13:2.6.15">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/com/typesafe/akka/akka-actor_2.13/2.6.15/akka-actor_2.13-2.6.15.jar" />
+  </library>
+  <library name="Maven: io.gatling.highcharts:gatling-charts-highcharts:3.6.1">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/gatling/highcharts/gatling-charts-highcharts/3.6.1/gatling-charts-highcharts-3.6.1.jar" />
+  </library>
+  <library name="Maven: io.burt:jmespath-core:0.5.0">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/burt/jmespath-core/0.5.0/jmespath-core-0.5.0.jar" />
+  </library>
+  <library name="Maven: org.slf4j:slf4j-api:1.7.31">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/org/slf4j/slf4j-api/1.7.31/slf4j-api-1.7.31.jar" />
+  </library>
+  <library name="Maven: com.fasterxml.jackson.core:jackson-databind:2.12.3">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.12.3/jackson-databind-2.12.3.jar" />
+  </library>
+  <library name="Maven: org.simpleflatmapper:lightning-csv:8.2.3">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/org/simpleflatmapper/lightning-csv/8.2.3/lightning-csv-8.2.3.jar" />
+  </library>
+  <library name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.12.3">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.12.3/jackson-annotations-2.12.3.jar" />
+  </library>
+  <library name="Maven: com.softwaremill.quicklens:quicklens_2.13:1.7.4">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/com/softwaremill/quicklens/quicklens_2.13/1.7.4/quicklens_2.13-1.7.4.jar" />
+  </library>
+  <library name="Maven: org.unbescape:unbescape:1.1.6.RELEASE">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/org/unbescape/unbescape/1.1.6.RELEASE/unbescape-1.1.6.RELEASE.jar" />
+  </library>
+  <library name="Maven: com.github.scopt:scopt_2.13:3.7.1">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/com/github/scopt/scopt_2.13/3.7.1/scopt_2.13-3.7.1.jar" />
+  </library>
+  <library name="Maven: org.jodd:jodd-util:6.0.1">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/org/jodd/jodd-util/6.0.1/jodd-util-6.0.1.jar" />
+  </library>
+  <library name="Maven: io.netty:netty-codec-http2:4.1.65.Final">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/netty/netty-codec-http2/4.1.65.Final/netty-codec-http2-4.1.65.Final.jar" />
+  </library>
+  <library name="Maven: org.hdrhistogram:HdrHistogram:2.1.12">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/org/hdrhistogram/HdrHistogram/2.1.12/HdrHistogram-2.1.12.jar" />
+  </library>
+  <library name="Maven: ch.qos.logback:logback-classic:1.2.3">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/ch/qos/logback/logback-classic/1.2.3/logback-classic-1.2.3.jar" />
+  </library>
+  <library name="Maven: org.scala-lang:scala-library:2.13.6">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/org/scala-lang/scala-library/2.13.6/scala-library-2.13.6.jar" />
+  </library>
+  <library name="Maven: io.netty:netty-codec-dns:4.1.65.Final">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/netty/netty-codec-dns/4.1.65.Final/netty-codec-dns-4.1.65.Final.jar" />
+  </library>
+  <library name="Maven: org.scala-lang.modules:scala-parser-combinators_2.13:2.0.0">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/org/scala-lang/modules/scala-parser-combinators_2.13/2.0.0/scala-parser-combinators_2.13-2.0.0.jar" />
+  </library>
+  <library name="Maven: io.netty:netty-tcnative-boringssl-static:2.0.40.Final">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/netty/netty-tcnative-boringssl-static/2.0.40.Final/netty-tcnative-boringssl-static-2.0.40.Final.jar" />
+  </library>
+  <library name="Maven: net.sf.saxon:Saxon-HE:10.5">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/net/sf/saxon/Saxon-HE/10.5/Saxon-HE-10.5.jar" />
+  </library>
+  <library name="Maven: javax.jms:javax.jms-api:2.0.1">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/javax/jms/javax.jms-api/2.0.1/javax.jms-api-2.0.1.jar" />
+  </library>
+  <library name="Maven: org.bouncycastle:bcutil-jdk15on:1.69">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/org/bouncycastle/bcutil-jdk15on/1.69/bcutil-jdk15on-1.69.jar" />
+  </library>
+  <library name="Maven: org.bouncycastle:bcpkix-jdk15on:1.69">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/org/bouncycastle/bcpkix-jdk15on/1.69/bcpkix-jdk15on-1.69.jar" />
+  </library>
+  <library name="Maven: io.gatling:gatling-http:3.6.1">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/gatling/gatling-http/3.6.1/gatling-http-3.6.1.jar" />
+  </library>
+  <library name="Maven: com.aayushatharva.brotli4j:native-windows-x86_64:1.4.2">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/com/aayushatharva/brotli4j/native-windows-x86_64/1.4.2/native-windows-x86_64-1.4.2.jar" />
+  </library>
+  <library name="Maven: io.pebbletemplates:pebble:3.1.5">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/pebbletemplates/pebble/3.1.5/pebble-3.1.5.jar" />
+  </library>
+  <library name="Maven: io.netty:netty-transport-native-unix-common:4.1.65.Final">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/netty/netty-transport-native-unix-common/4.1.65.Final/netty-transport-native-unix-common-4.1.65.Final.jar" />
+  </library>
+  <library name="Maven: io.netty:netty-codec-mqtt:4.1.65.Final">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/netty/netty-codec-mqtt/4.1.65.Final/netty-codec-mqtt-4.1.65.Final.jar" />
+  </library>
+  <library name="Maven: com.aayushatharva.brotli4j:native-osx-x86_64:1.4.2">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/com/aayushatharva/brotli4j/native-osx-x86_64/1.4.2/native-osx-x86_64-1.4.2.jar" />
+  </library>
+  <library name="Maven: com.aayushatharva.brotli4j:native-linux-aarch64:1.4.2">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/com/aayushatharva/brotli4j/native-linux-aarch64/1.4.2/native-linux-aarch64-1.4.2.jar" />
+  </library>
+  <library name="Maven: io.netty:netty-codec:4.1.65.Final">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/netty/netty-codec/4.1.65.Final/netty-codec-4.1.65.Final.jar" />
+  </library>
+  <library name="Maven: io.gatling:gatling-mqtt:3.6.1">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/gatling/gatling-mqtt/3.6.1/gatling-mqtt-3.6.1.jar" />
+  </library>
+  <library name="Maven: io.gatling:gatling-jms:3.6.1">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/gatling/gatling-jms/3.6.1/gatling-jms-3.6.1.jar" />
+  </library>
+  <library name="Maven: io.netty:netty-buffer:4.1.65.Final">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/netty/netty-buffer/4.1.65.Final/netty-buffer-4.1.65.Final.jar" />
+  </library>
+  <library name="Maven: io.gatling:gatling-recorder:3.6.1">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/gatling/gatling-recorder/3.6.1/gatling-recorder-3.6.1.jar" />
+  </library>
+  <library name="Maven: io.gatling:gatling-commons:3.6.1">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/gatling/gatling-commons/3.6.1/gatling-commons-3.6.1.jar" />
+  </library>
+  <library name="Maven: io.gatling:gatling-commons-shared-unstable:3.6.1">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/gatling/gatling-commons-shared-unstable/3.6.1/gatling-commons-shared-unstable-3.6.1.jar" />
+  </library>
+  <library name="Maven: io.netty:netty-codec-socks:4.1.65.Final">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/netty/netty-codec-socks/4.1.65.Final/netty-codec-socks-4.1.65.Final.jar" />
+  </library>
+  <library name="Maven: io.gatling:gatling-graphite:3.6.1">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/gatling/gatling-graphite/3.6.1/gatling-graphite-3.6.1.jar" />
+  </library>
+  <library name="Maven: com.typesafe:config:1.4.0">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/com/typesafe/config/1.4.0/config-1.4.0.jar" />
+  </library>
+  <library name="Maven: com.typesafe.akka:akka-slf4j_2.13:2.6.15">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/com/typesafe/akka/akka-slf4j_2.13/2.6.15/akka-slf4j_2.13-2.6.15.jar" />
+  </library>
+  <library name="Maven: io.gatling:gatling-app:3.6.1">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/gatling/gatling-app/3.6.1/gatling-app-3.6.1.jar" />
+  </library>
+  <library name="Maven: io.burt:jmespath-jackson:0.5.0">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/burt/jmespath-jackson/0.5.0/jmespath-jackson-0.5.0.jar" />
+  </library>
+  <library name="Maven: org.simpleflatmapper:sfm-util:8.2.3">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/org/simpleflatmapper/sfm-util/8.2.3/sfm-util-8.2.3.jar" />
+  </library>
+  <library name="Maven: com.github.ben-manes.caffeine:caffeine:2.9.1">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/com/github/ben-manes/caffeine/caffeine/2.9.1/caffeine-2.9.1.jar" />
+  </library>
+  <library name="Maven: org.scala-lang:scala-reflect:2.13.6">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/org/scala-lang/scala-reflect/2.13.6/scala-reflect-2.13.6.jar" />
+  </library>
+  <library name="Maven: com.fasterxml.jackson.core:jackson-core:2.12.3">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.12.3/jackson-core-2.12.3.jar" />
+  </library>
+  <library name="Maven: com.tdunning:t-digest:3.1">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/com/tdunning/t-digest/3.1/t-digest-3.1.jar" />
+  </library>
+  <library name="Maven: org.typelevel:spire-macros_2.13:0.17.0">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/org/typelevel/spire-macros_2.13/0.17.0/spire-macros_2.13-0.17.0.jar" />
+  </library>
+  <library name="Maven: com.google.errorprone:error_prone_annotations:2.5.1">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/com/google/errorprone/error_prone_annotations/2.5.1/error_prone_annotations-2.5.1.jar" />
+  </library>
+  <library name="Maven: org.jodd:jodd-lagarto:6.0.5">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/org/jodd/jodd-lagarto/6.0.5/jodd-lagarto-6.0.5.jar" />
+  </library>
+  <library name="Maven: io.netty:netty-resolver-dns:4.1.65.Final">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/netty/netty-resolver-dns/4.1.65.Final/netty-resolver-dns-4.1.65.Final.jar" />
+  </library>
+  <library name="Maven: org.checkerframework:checker-qual:3.10.0">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/org/checkerframework/checker-qual/3.10.0/checker-qual-3.10.0.jar" />
+  </library>
+  <library name="Maven: ch.qos.logback:logback-core:1.2.3">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/ch/qos/logback/logback-core/1.2.3/logback-core-1.2.3.jar" />
+  </library>
+  <library name="Maven: org.scala-lang.modules:scala-swing_2.13:3.0.0">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/org/scala-lang/modules/scala-swing_2.13/3.0.0/scala-swing_2.13-3.0.0.jar" />
+  </library>
+  <library name="Maven: com.eatthepath:fast-uuid:0.1">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/com/eatthepath/fast-uuid/0.1/fast-uuid-0.1.jar" />
+  </library>
+  <library name="Maven: org.scala-lang.modules:scala-java8-compat_2.13:0.9.0">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/org/scala-lang/modules/scala-java8-compat_2.13/0.9.0/scala-java8-compat_2.13-0.9.0.jar" />
+  </library>
+  <library name="Maven: io.netty:netty-handler-proxy:4.1.65.Final">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/netty/netty-handler-proxy/4.1.65.Final/netty-handler-proxy-4.1.65.Final.jar" />
+  </library>
+  <library name="Maven: net.debasishg:redisclient_2.13:3.30">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/net/debasishg/redisclient_2.13/3.30/redisclient_2.13-3.30.jar" />
+  </library>
+  <library name="Maven: io.suzaku:boopickle_2.13:1.3.3">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/suzaku/boopickle_2.13/1.3.3/boopickle_2.13-1.3.3.jar" />
+  </library>
+  <library name="Maven: org.bouncycastle:bcprov-jdk15on:1.69">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/org/bouncycastle/bcprov-jdk15on/1.69/bcprov-jdk15on-1.69.jar" />
+  </library>
+  <library name="Maven: org.apache.commons:commons-pool2:2.8.0">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/org/apache/commons/commons-pool2/2.8.0/commons-pool2-2.8.0.jar" />
+  </library>
+  <library name="Maven: io.gatling:gatling-core-java:3.7.6">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/gatling/gatling-core-java/3.7.6/gatling-core-java-3.7.6.jar" />
+  </library>
+  <library name="Maven: net.jodah:typetools:0.6.3">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/net/jodah/typetools/0.6.3/typetools-0.6.3.jar" />
+  </library>
+  <library name="Maven: com.google.code.findbugs:jsr305:3.0.2">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar" />
+  </library>
+  <library name="Maven: io.gatling:gatling-http-java:3.7.6">
+    <archive path="C:/Users/Edward_Xia/.m2/repository/io/gatling/gatling-http-java/3.7.6/gatling-http-java-3.7.6.jar" />
+  </library>
+  <library name="scala-sdk-2.13.8">
+    <archive path="C:/Users/Edward_Xia/AppData/Local/Coursier/cache/v1/https/repo1.maven.org/maven2/org/scala-lang/scala-library/2.13.8/scala-library-2.13.8.jar" />
+    <archive path="C:/Users/Edward_Xia/AppData/Local/Coursier/cache/v1/https/repo1.maven.org/maven2/org/scala-lang/scala-reflect/2.13.8/scala-reflect-2.13.8.jar" />
+  </library>
+</eclipse-userlibraries>
+
