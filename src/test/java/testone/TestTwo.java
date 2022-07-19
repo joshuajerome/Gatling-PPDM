@@ -14,7 +14,11 @@ import java.util.List;
 
 public class TestTwo extends Simulation {
 	
-	/* MISC */
+	/* VARS */
+	
+	List<TestSuite> tests = CSVReader.processFile(getDataFile());
+	
+	/* Get File */
 	
 	private String getDataFile() {
 		String datafile = System.getProperty("datafile");
@@ -24,5 +28,30 @@ public class TestTwo extends Simulation {
 		}
 		return datafile;
 	}
+	
+	/* HTTP Protocol Builder */
+	
+	HttpProtocolBuilder httpProtocol = HttpDsl.http
+			.baseUrl(tests.get(0).uri.toString())
+			.acceptHeader("application/json")
+			.userAgentHeader("Gatling Performance Test");
+	
+	/* HTTP Request: POST */
+	
+	ChainBuilder post = exec(
+			http("HTTP Request: POST")
+			.post(":" + tests.get(0).port + tests.get(0).restApiUri)
+			.header("content-type", "application/json")
+			);
+			
+	
+	/* HTTP Request: GET */
+	
+	/**/
+	
+	{
+		
+	}
+	
 	
 }
