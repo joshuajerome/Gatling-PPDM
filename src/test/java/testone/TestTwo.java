@@ -32,6 +32,8 @@ public class TestTwo extends Simulation {
 	/* HTTP Protocol Builder */
 	
 	HttpProtocolBuilder httpProtocol;
+	ChainBuilder get;
+	ChainBuilder post;
 	
 //	HttpProtocolBuilder httpProtocol = HttpDsl.http
 //			.baseUrl(tests.get(iterator).uri.toString())
@@ -67,7 +69,7 @@ public class TestTwo extends Simulation {
 			HTTPMethod type = ts.method;
 			switch(type) {
 				case GET:
-					ChainBuilder get = exec(
+					get = exec(
 							http("HTTP Request: GET")
 							.get(ts.uri.toString())
 							.header("Authorization", session -> session.getString("token_type") 
@@ -76,7 +78,7 @@ public class TestTwo extends Simulation {
 					scn = scenario("GET request").exec(get);
 					break;
 				case POST:
-					ChainBuilder post = exec(
+					post = exec(
 							http("HTTP Request: POST")
 							.post(":" + ts.port + ts.restApiUri)
 							.header("content-type", "application/json")
