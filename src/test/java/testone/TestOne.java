@@ -45,6 +45,28 @@ public class TestOne extends Simulation {
     	      }
     	   );
     
+//	HttpProtocolBuilder httpProtocol = HttpDsl.http
+//	.baseUrl(tests.get(iterator).uri.toString())
+//	.acceptHeader("application/json")
+//	.userAgentHeader("Gatling Performance Test");
+
+/* HTTP Request: POST */
+
+//ChainBuilder post = exec(
+//	http("HTTP Request: POST")
+//	.post(":" + tests.get(iterator).port + tests.get(iterator).restApiUri)
+//	.header("content-type", "application/json")
+//	);
+
+/* HTTP Request: GET */
+
+//ChainBuilder get = exec(
+//	http("HTTP Request: GET")
+//	.get(tests.get(iterator).uri.toString())
+//	.header("Authorization", session -> session.getString("token_type") 
+//			+ " " + session.getString("access_token"))
+//	);
+    
 
     @SuppressWarnings("unchecked")
     ScenarioBuilder scn = scenario("request")

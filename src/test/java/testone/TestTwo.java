@@ -16,8 +16,6 @@ public class TestTwo extends Simulation {
 	
 	private List<TestSuite> tests = CSVReader.processFile(getDataFile());
 	
-	private ScenarioBuilder scn;
-	
 	/* Get File */
 	
 	private String getDataFile() {
@@ -29,45 +27,23 @@ public class TestTwo extends Simulation {
 		return datafile;
 	}
 	
-	/* HTTP Protocol Builder */
+	/* Builders */
 	
-	HttpProtocolBuilder httpProtocol;
-	ChainBuilder get;
-	ChainBuilder post;
-	
-//	HttpProtocolBuilder httpProtocol = HttpDsl.http
-//			.baseUrl(tests.get(iterator).uri.toString())
-//			.acceptHeader("application/json")
-//			.userAgentHeader("Gatling Performance Test");
-	
-	/* HTTP Request: POST */
-	
-//	ChainBuilder post = exec(
-//			http("HTTP Request: POST")
-//			.post(":" + tests.get(iterator).port + tests.get(iterator).restApiUri)
-//			.header("content-type", "application/json")
-//			);
-	
-	/* HTTP Request: GET */
-	
-//	ChainBuilder get = exec(
-//			http("HTTP Request: GET")
-//			.get(tests.get(iterator).uri.toString())
-//			.header("Authorization", session -> session.getString("token_type") 
-//					+ " " + session.getString("access_token"))
-//			);
+	private HttpProtocolBuilder httpProtocol;
+	private ChainBuilder get;
+	private ChainBuilder post;
+	private ScenarioBuilder scn;
 	
 	@SuppressWarnings("unchecked")
 	private void testIterate() {
 		for(TestSuite ts : tests) {
 			
 			httpProtocol = HttpDsl.http
-					.baseUrl(ts.uri.toString())
+					.baseUrl("https://" + ts.ip)
 					.acceptHeader("application/json")
 					.userAgentHeader("Gatling Performance Test");
-			
-			HTTPMethod type = ts.method;
-			switch(type) {
+
+			switch(ts.HTTPmethod) {
 				case GET:
 					get = exec(
 							http("HTTP Request: GET")

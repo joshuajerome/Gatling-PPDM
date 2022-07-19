@@ -18,9 +18,8 @@ public class TestSuite {
 	 String ip;
 	 int requestCount;
 	 int threadCount;
-	 HTTPMethod method;
+	 HTTPMethod HTTPmethod;
 	 String requestBody;
-	
 	 URI uri;
 
 	TestSuite (int id, String restApiUri, int port, String ip, int requestCount, int threadCount, HTTPMethod method, String body){
@@ -30,7 +29,7 @@ public class TestSuite {
 		this.ip = ip;
 		this.requestCount = requestCount;
 		this.threadCount = threadCount;
-		this.method = method;
+		this.HTTPmethod = method;
 		this.requestBody = body;
 		
 		try {
@@ -46,8 +45,8 @@ public class TestSuite {
 		sb.append("Test Suite #" + this.id + "\n");
 		sb.append("Rest Api Uri: " + this.uri.toString() + "\n");
 		sb.append("Request Count:" + requestCount + "\n");
-		sb.append("Thread Count:" + threadCount + "\n");
-		sb.append("Method:" + method.toString() + "\n");
+		sb.append("Thread Count:" + threadCount + "\n");	
+		sb.append("Method:" + HTTPmethod.toString() + "\n");
 		sb.append("Request Body:" + requestBody + "\n");
 		return sb.toString();
 	}
