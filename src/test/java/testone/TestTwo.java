@@ -62,9 +62,7 @@ public class TestTwo extends Simulation {
 					scn = scenario("POST request").exec(post);
 					break;
 			}
-
 		}
-
 	}
 	
 	{

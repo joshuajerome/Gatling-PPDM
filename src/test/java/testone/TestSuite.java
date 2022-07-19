@@ -30,10 +30,9 @@ public class TestSuite {
 		this.requestCount = requestCount;
 		this.threadCount = threadCount;
 		this.HTTPmethod = method;
-		this.requestBody = body;
-		
+		this.requestBody = body;	
 		try {
-			this.uri = new URI( "https://" + this.ip + ":" + this.port + this.restApiUri);
+			this.uri = new URI("https://" + this.ip + ":" + this.port + this.restApiUri);
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 	 	}
