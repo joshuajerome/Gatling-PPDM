@@ -24,7 +24,7 @@ public class TestThree extends Simulation {
     HttpProtocolBuilder httpProtocol = HttpDsl.http
             .baseUrl(tests.get(0).uri.toString())
             .acceptHeader("application/json")
-            .userAgentHeader("Gatling/Performance Test");
+            .userAgentHeader("Gatling Performance Test");
 
 
     ScenarioBuilder scn = scenario("Get API request")
