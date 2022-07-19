@@ -42,7 +42,6 @@ public class CSVReader {
 					arr[7]
 				);
 			}).collect(Collectors.toList());
-//			tests.forEach(System.out::println);
 		} catch (Exception e) {
 			System.out.println("Caught exception: " + e.getMessage());
 		}
