@@ -17,7 +17,7 @@ public class CSVReader {
 	 * arr[0] = id
 	 * arr[1] = restApiUri
 	 * arr[2] = port
-	 * arr[3] = ip
+	 * arr[3] = IP
 	 * arr[4] = requestCount
 	 * arr[5] = threadCount
 	 * arr[6] = HTTP Method
