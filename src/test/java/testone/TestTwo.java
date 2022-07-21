@@ -24,7 +24,7 @@ public class TestTwo extends Simulation {
 		String datafile = System.getProperty("datafile");
 		
 		if (datafile == null || datafile.length() == 0) {
-			datafile = "data.csv";
+			throw new RuntimeException("*** EMPTY DATA FILE ARG ***");
 		}
 		return datafile;
 	}
@@ -41,7 +41,13 @@ public class TestTwo extends Simulation {
 		
 		tests.stream().forEach(ts -> {
 			
-			scnList.add(scenario(ts.HTTPmethod + " request"));
+			scnList.add(scenario(
+					"TEST SUITE #" 
+					+ tests.indexOf(ts)
+					+ "::" 
+					+ ts.HTTPmethod 
+					+ " "
+					+ ts.uri.toString()));
 			
 			httpProtocol = HttpDsl.http
 					.baseUrl("https://" + ts.ip)
@@ -77,7 +83,10 @@ public class TestTwo extends Simulation {
 								.during(java.time.Duration.ofSeconds(5))))
 				.protocols(httpProtocol);
 			}
-		);		
+		);
+		
+		PopulationBuilder pb[] = {};
+		setUp(pb).protocols(httpProtocol);
 	}
 	
 }
