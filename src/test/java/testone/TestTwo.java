@@ -8,6 +8,7 @@ import io.gatling.javaapi.http.*;
 import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TestTwo extends Simulation {
@@ -15,6 +16,7 @@ public class TestTwo extends Simulation {
 	/* VARS */
 	
 	private List<TestSuite> tests = CSVReader.processFile(getDataFile());
+	private List<ScenarioBuilder> scnList = new ArrayList<>(); 
 	
 	/* Get File */
 	
@@ -30,48 +32,52 @@ public class TestTwo extends Simulation {
 	/* Builders */
 	
 	private HttpProtocolBuilder httpProtocol;
-	private ChainBuilder get;
-	private ChainBuilder post;
-	private ScenarioBuilder scn;
+	
+	/* different HTTP requests */
+	private ChainBuilder cb;
 	
 	@SuppressWarnings("unchecked")
 	private void testIterate() {
-		for(TestSuite ts : tests) {
+		
+		tests.stream().forEach(ts -> {
+			
+			scnList.add(scenario(ts.HTTPmethod + " request"));
 			
 			httpProtocol = HttpDsl.http
 					.baseUrl("https://" + ts.ip)
 					.acceptHeader("application/json")
 					.userAgentHeader("Gatling Performance Test");
-
+			
 			switch(ts.HTTPmethod) {
 				case GET:
-					get = exec(
-							http("HTTP Request: GET")
+					cb = exec(http("HTTP Request: GET")
 							.get(ts.uri.toString())
 							.header("Authorization", session -> session.getString("token_type") 
 									+ " " + session.getString("access_token"))
 							);
-					scn = scenario("GET request").exec(get);
 					break;
+					
 				case POST:
-					post = exec(
-							http("HTTP Request: POST")
+					cb = exec(http("HTTP Request: POST")
 							.post(":" + ts.port + ts.restApiUri)
 							.header("content-type", "application/json")
 							);
-					scn = scenario("POST request").exec(post);
 					break;
 			}
-		}
+			scnList.get(scnList.size() - 1).exec(cb);
+		});
 	}
 	
 	{
-
 		testIterate();
-		setUp(scn.injectOpen(constantUsersPerSec(10).during(java.time.Duration.ofSeconds(5))))
-         .protocols(httpProtocol);
-		
+		scnList.stream().forEach(scenario -> 
+			{
+				setUp(scenario
+						.injectOpen(constantUsersPerSec(10)
+								.during(java.time.Duration.ofSeconds(5))))
+				.protocols(httpProtocol);
+			}
+		);		
 	}
-	
 	
 }

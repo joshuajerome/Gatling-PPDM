@@ -12,18 +12,6 @@ public class CSVReader {
 	
 	private static List<TestSuite> tests;
 	
-	/** 
-	 *
-	 * arr[0] = id
-	 * arr[1] = restApiUri
-	 * arr[2] = port
-	 * arr[3] = IP
-	 * arr[4] = requestCount
-	 * arr[5] = threadCount
-	 * arr[6] = HTTP Method
-	 * arr[7] = body
-	 */
-	
 	public static List<TestSuite> processFile (String filename) {
 		Pattern pattern = Pattern.compile(",");
 		ClassLoader cl = Thread.currentThread().getContextClassLoader();
