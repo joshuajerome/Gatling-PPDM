@@ -26,6 +26,14 @@ public class TestTwo extends Simulation {
 	private List<PopulationBuilder> scnList= new ArrayList<>();
 	private String credentials;
 	
+	/* Builders */
+	
+	private HttpProtocolBuilder httpProtocol;
+	private ChainBuilder get;
+	private ChainBuilder post;
+	private ChainBuilder login;
+	private ScenarioBuilder scn;
+	
 	/* Get File */
 	
 	private String getDataFile() {
@@ -51,14 +59,6 @@ public class TestTwo extends Simulation {
 		return credentials;
 	}
 	
-	/* Builders */
-	
-	private HttpProtocolBuilder httpProtocol;
-	private ChainBuilder get;
-	private ChainBuilder post;
-	private ChainBuilder login;
-	private ScenarioBuilder scn;
-	
 	private void login() {
 		
 		try {
@@ -76,7 +76,6 @@ public class TestTwo extends Simulation {
     			.check(jmesPath("access_token").ofString().saveAs("access_token"))
     		    .check(jmesPath("token_type").ofString().saveAs("token_type"))
     			 );
-		 
 	}
 	
 	@SuppressWarnings("unchecked")

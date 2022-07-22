@@ -19,7 +19,7 @@ public class TestSuite {
 	 int requestCount;
 	 int threadCount;
 	 String requestBody;
-	 int testDuration; // **
+	 int testDuration;
 	 String ip;
 	 
 	 URI uri;
