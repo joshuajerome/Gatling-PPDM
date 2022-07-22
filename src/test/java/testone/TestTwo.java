@@ -42,7 +42,6 @@ public class TestTwo extends Simulation {
 	private ChainBuilder post;
 	private ChainBuilder login;
 	private ScenarioBuilder scn;
-	//PopulationBuilder[] scnList = new PopulationBuilder[6];
 	private List<PopulationBuilder> scnList= new ArrayList<>();
 	
 	@SuppressWarnings("unchecked")
@@ -114,65 +113,6 @@ public class TestTwo extends Simulation {
 			}
 			
 		});
-		//int index = 0;
-		
-	/*	for(TestSuite ts : tests) {
-			
-			httpProtocol = HttpDsl.http
-					.baseUrl("https://" + ts.ip)
-					.acceptHeader("application/json")
-					.userAgentHeader("Gatling Performance Test");
-					
-			switch(ts.HTTPmethod) {
-				case GET:
-					login = exec(
-			    			http("login request")
-			    			.post(":8443/api/v2/login")
-			    			.header("content-type","application/json")
-			    			.body(StringBody(credentials))
-			    			//.check(status().is(200))
-			    			.check(jmesPath("access_token").ofString().saveAs("access_token"))
-			    		    .check(jmesPath("token_type").ofString().saveAs("token_type"))
-			    			 );
-					
-					get = exec(
-							http("HTTP Request: GET")
-							.get(ts.uri.toString())
-							.header("Authorization", session -> session.getString("token_type") 
-									+ " " + session.getString("access_token"))
-							);
-					
-					scn = scenario("Test Suite " + ts.id + ": " + "GET request").exec(login,get);
-					scnList[index] = scn.injectOpen(constantUsersPerSec(1).during(java.time.Duration.ofSeconds(1)))
-			         .protocols(httpProtocol);
-					index++;
-					
-					break;
-				case POST:
-					login = exec(
-			    			http("login request")
-			    			.post(":8443/api/v2/login")
-			    			.header("content-type","application/json")
-			    			.body(StringBody(credentials))
-			    			//.check(status().is(200))
-			    			.check(jmesPath("access_token").ofString().saveAs("access_token"))
-			    		    .check(jmesPath("token_type").ofString().saveAs("token_type"))
-			    			 );
-					
-					post = exec(
-							http("HTTP Request: POST")
-							.post(":" + ts.port + ts.restApiUri)
-							.header("Authorization", session -> session.getString("token_type") 
-									+ " " + session.getString("access_token"))
-							.body(RawFileBody("postBody.json")).asJson()
-							);
-					scn = scenario("Test Suite " + ts.id + ": " + "POST request").exec(login,post);
-					scnList[index] = scn.injectOpen(constantUsersPerSec(1).during(java.time.Duration.ofSeconds(1)))
-					         .protocols(httpProtocol);
-					index++;
-					break;
-			}
-		}*/
 	}
 	
 	{
