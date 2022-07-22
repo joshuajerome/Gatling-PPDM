@@ -1,1 +1,1 @@
-@mvn gatling:test -Dgatling.simulationClass=testone.TestTwo -Ddatafile="data.csv" -Dusername="admin" -Dpassword="Changeme@1"
+@mvn gatling:test -Dgatling.simulationClass=testone.Testing -Ddatafile="data.csv" -Dusername="admin" -Dpassword="Changeme@1"

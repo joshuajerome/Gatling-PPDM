@@ -15,7 +15,6 @@ import java.util.ArrayList;
  * 
  * Login only at start of test
  * Logout API
- * Not Hardcoding Login Credentials
  */
 
 public class Testing extends Simulation {
@@ -40,7 +39,7 @@ public class Testing extends Simulation {
 		String datafile = System.getProperty("datafile");
 		
 		if (datafile == null || datafile.length() == 0) {
-			datafile = "data.csv";
+			throw new RuntimeException("*** No Given File ***");
 		}
 		return datafile;
 	}
@@ -140,6 +139,4 @@ public class Testing extends Simulation {
         .protocols(httpProtocol);
 		
 	}
-	
-	
 }

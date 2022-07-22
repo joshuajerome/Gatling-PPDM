@@ -32,7 +32,7 @@ public class CSVReader {
 				);
 			}).collect(Collectors.toList());
 				
-		System.out.println(lines);
+//		System.out.println(lines);
 		} catch (Exception e) {
 			System.out.println("Caught exception: " + e.getMessage());
 		}
