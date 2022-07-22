@@ -11,20 +11,20 @@ import static io.gatling.javaapi.http.HttpDsl.*;
 import java.util.List;
 import java.util.ArrayList;
 
+/** TODO: 
+ * 
+ * Login only at start of test
+ * Logout API
+ * Not Hardcoding Login Credentials
+ */
+
 public class TestTwo extends Simulation {
 	
 	/* VARS */
 	
 	private List<TestSuite> tests = CSVReader.processFile(getDataFile());
 	private List<PopulationBuilder> scnList= new ArrayList<>();
-	
-	/* Login Credentials */
-	
-	static String username = "admin";
-	static String password = "Changeme@1";
-    static String credentials = "{\"username\":\"" + username
-    		+ "\",\"password\":\"" 
-    		+ password + "\"}";
+	private String credentials;
 	
 	/* Get File */
 	
@@ -37,6 +37,20 @@ public class TestTwo extends Simulation {
 		return datafile;
 	}
 	
+	/* Get Login Credentials */
+	
+	private String getCredentials() throws Exception {
+		String username = System.getProperty("username");
+		String password = System.getProperty("password");
+		if (username == null || password == null) {
+			throw new Exception("missing credentials");
+		}
+		String credentials = "{\"username\":\"" + username
+	    		+ "\",\"password\":\"" 
+	    		+ password + "\"}";
+		return credentials;
+	}
+	
 	/* Builders */
 	
 	private HttpProtocolBuilder httpProtocol;
@@ -46,6 +60,13 @@ public class TestTwo extends Simulation {
 	private ScenarioBuilder scn;
 	
 	private void login() {
+		
+		try {
+			credentials = getCredentials();
+		} catch (Exception e) {
+			System.out.println("Failed to Login");
+		}
+		
 		login = exec(
     			http("login request")
     			.post(":8443/api/v2/login")
@@ -78,7 +99,7 @@ public class TestTwo extends Simulation {
 							);
 					
 					scn = scenario("Test Suite # " 
-									+ ts.id + ":: " 
+									+ ts.id + "::" 
 									+ ts.HTTPmethod
 									+ " "
 									+ ts.uri.toString())
@@ -98,7 +119,7 @@ public class TestTwo extends Simulation {
 							);
 					
 					scn = scenario("Test Suite # " 
-							+ ts.id + ":: " 
+							+ ts.id + "::" 
 							+ ts.HTTPmethod
 							+ " "
 							+ ts.uri.toString())
