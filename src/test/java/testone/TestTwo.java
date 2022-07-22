@@ -3,14 +3,10 @@ package testone;
 /* Import Statements */
 
 import io.gatling.javaapi.core.*;
-
 import io.gatling.javaapi.http.*;
 
 import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.*;
-
-import io.gatling.javaapi.core.PopulationBuilder.*;
-
 
 import java.util.List;
 import java.util.ArrayList;
@@ -49,6 +45,18 @@ public class TestTwo extends Simulation {
 	private ChainBuilder login;
 	private ScenarioBuilder scn;
 	
+	private void login() {
+		login = exec(
+    			http("login request")
+    			.post(":8443/api/v2/login")
+    			.header("content-type","application/json")
+    			.body(StringBody(credentials))
+    			.check(jmesPath("access_token").ofString().saveAs("access_token"))
+    		    .check(jmesPath("token_type").ofString().saveAs("token_type"))
+    			 );
+		 
+	}
+	
 	@SuppressWarnings("unchecked")
 	private void runScenarios() {
 		
@@ -62,14 +70,6 @@ public class TestTwo extends Simulation {
 			
 			switch(ts.HTTPmethod) {
 				case GET:
-					login = exec(
-			    			http("login request")
-			    			.post(":8443/api/v2/login")
-			    			.header("content-type","application/json")
-			    			.body(StringBody(credentials))
-			    			.check(jmesPath("access_token").ofString().saveAs("access_token"))
-			    		    .check(jmesPath("token_type").ofString().saveAs("token_type"))
-			    			 );
 					
 					get = exec(http("HTTP Request: GET")
 							.get(ts.uri.toString())
@@ -89,14 +89,6 @@ public class TestTwo extends Simulation {
 					break;
 					
 				case POST:
-					login = exec(
-			    			http("login request")
-			    			.post(":8443/api/v2/login")
-			    			.header("content-type","application/json")
-			    			.body(StringBody(credentials))
-			    			.check(jmesPath("access_token").ofString().saveAs("access_token"))
-			    		    .check(jmesPath("token_type").ofString().saveAs("token_type"))
-			    			 );
 					
 					post = exec(http("HTTP Request: POST")
 							.post(":" + ts.port + ts.restApiUri)
@@ -121,7 +113,7 @@ public class TestTwo extends Simulation {
 	}
 	
 	{
-
+		login();
 		runScenarios();
 		setUp(scnList)
         .protocols(httpProtocol);
