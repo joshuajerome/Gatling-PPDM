@@ -8,15 +8,20 @@ import io.gatling.javaapi.http.*;
 import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.*;
 
-import java.util.ArrayList;
+import io.gatling.javaapi.core.PopulationBuilder.*;
+
+
 import java.util.List;
 
 public class TestTwo extends Simulation {
 	
 	/* VARS */
-	
+	static String username = "admin";
+	static String password = "Changeme@1";
+    static String credentials = "{\"username\":\"" + username
+    		+ "\",\"password\":\"" 
+    		+ password + "\"}";
 	private List<TestSuite> tests = CSVReader.processFile(getDataFile());
-	private List<ScenarioBuilder> scnList = new ArrayList<>(); 
 	
 	/* Get File */
 	
@@ -24,7 +29,7 @@ public class TestTwo extends Simulation {
 		String datafile = System.getProperty("datafile");
 		
 		if (datafile == null || datafile.length() == 0) {
-			throw new RuntimeException("*** EMPTY DATA FILE ARG ***");
+			datafile = "data.csv";
 		}
 		return datafile;
 	}
@@ -32,61 +37,83 @@ public class TestTwo extends Simulation {
 	/* Builders */
 	
 	private HttpProtocolBuilder httpProtocol;
-	
-	/* different HTTP requests */
-	private ChainBuilder cb;
+	private ChainBuilder get;
+	private ChainBuilder post;
+	private ChainBuilder login;
+	private ScenarioBuilder scn;
+	PopulationBuilder[] scnList = new PopulationBuilder[6];
 	
 	@SuppressWarnings("unchecked")
 	private void testIterate() {
 		
-		tests.stream().forEach(ts -> {
-			
-			scnList.add(scenario(
-					"TEST SUITE #" 
-					+ tests.indexOf(ts)
-					+ "::" 
-					+ ts.HTTPmethod 
-					+ " "
-					+ ts.uri.toString()));
+		int index = 0;
+		
+		for(TestSuite ts : tests) {
+			System.out.println(ts.id);
 			
 			httpProtocol = HttpDsl.http
 					.baseUrl("https://" + ts.ip)
 					.acceptHeader("application/json")
 					.userAgentHeader("Gatling Performance Test");
-			
+					
 			switch(ts.HTTPmethod) {
 				case GET:
-					cb = exec(http("HTTP Request: GET")
+					login = exec(
+			    			http("login request")
+			    			.post(":8443/api/v2/login")
+			    			.header("content-type","application/json")
+			    			.body(StringBody(credentials))
+			    			//.check(status().is(200))
+			    			.check(jmesPath("access_token").ofString().saveAs("access_token"))
+			    		    .check(jmesPath("token_type").ofString().saveAs("token_type"))
+			    			 );
+					
+					get = exec(
+							http("HTTP Request: GET")
 							.get(ts.uri.toString())
 							.header("Authorization", session -> session.getString("token_type") 
 									+ " " + session.getString("access_token"))
 							);
-					break;
+					scn = scenario("Test Suite " + ts.id + ": " + "GET request").exec(login,get);
+					scnList[index] = scn.injectOpen(constantUsersPerSec(1).during(java.time.Duration.ofSeconds(1)))
+			         .protocols(httpProtocol);
+					index++;
 					
+					break;
 				case POST:
-					cb = exec(http("HTTP Request: POST")
+					login = exec(
+			    			http("login request")
+			    			.post(":8443/api/v2/login")
+			    			.header("content-type","application/json")
+			    			.body(StringBody(credentials))
+			    			//.check(status().is(200))
+			    			.check(jmesPath("access_token").ofString().saveAs("access_token"))
+			    		    .check(jmesPath("token_type").ofString().saveAs("token_type"))
+			    			 );
+					
+					post = exec(
+							http("HTTP Request: POST")
 							.post(":" + ts.port + ts.restApiUri)
-							.header("content-type", "application/json")
+							.header("Authorization", session -> session.getString("token_type") 
+									+ " " + session.getString("access_token"))
+							.body(RawFileBody("postBody.json")).asJson()
 							);
+					scn = scenario("Test Suite " + ts.id + ": " + "POST request").exec(login,post);
+					scnList[index] = scn.injectOpen(constantUsersPerSec(1).during(java.time.Duration.ofSeconds(1)))
+					         .protocols(httpProtocol);
+					index++;
 					break;
 			}
-			scnList.get(scnList.size() - 1).exec(cb);
-		});
+		}
 	}
 	
 	{
+
 		testIterate();
-		scnList.stream().forEach(scenario -> 
-			{
-				setUp(scenario
-						.injectOpen(constantUsersPerSec(10)
-								.during(java.time.Duration.ofSeconds(5))))
-				.protocols(httpProtocol);
-			}
-		);
+		setUp(scnList)
+        .protocols(httpProtocol);
 		
-		PopulationBuilder pb[] = {};
-		setUp(pb).protocols(httpProtocol);
 	}
+	
 	
 }
