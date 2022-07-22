@@ -3,6 +3,7 @@ package testone;
 /* Import Statements */
 
 import io.gatling.javaapi.core.*;
+
 import io.gatling.javaapi.http.*;
 
 import static io.gatling.javaapi.core.CoreDsl.*;
@@ -17,12 +18,17 @@ import java.util.ArrayList;
 public class TestTwo extends Simulation {
 	
 	/* VARS */
+	
+	private List<TestSuite> tests = CSVReader.processFile(getDataFile());
+	private List<PopulationBuilder> scnList= new ArrayList<>();
+	
+	/* Login Credentials */
+	
 	static String username = "admin";
 	static String password = "Changeme@1";
     static String credentials = "{\"username\":\"" + username
     		+ "\",\"password\":\"" 
     		+ password + "\"}";
-	private List<TestSuite> tests = CSVReader.processFile(getDataFile());
 	
 	/* Get File */
 	
@@ -42,10 +48,9 @@ public class TestTwo extends Simulation {
 	private ChainBuilder post;
 	private ChainBuilder login;
 	private ScenarioBuilder scn;
-	private List<PopulationBuilder> scnList= new ArrayList<>();
 	
 	@SuppressWarnings("unchecked")
-	private void testIterate() {
+	private void runScenarios() {
 		
 		
 		tests.stream().forEach(ts -> {
@@ -62,7 +67,6 @@ public class TestTwo extends Simulation {
 			    			.post(":8443/api/v2/login")
 			    			.header("content-type","application/json")
 			    			.body(StringBody(credentials))
-			    			//.check(status().is(200))
 			    			.check(jmesPath("access_token").ofString().saveAs("access_token"))
 			    		    .check(jmesPath("token_type").ofString().saveAs("token_type"))
 			    			 );
@@ -72,13 +76,14 @@ public class TestTwo extends Simulation {
 							.header("Authorization", session -> session.getString("token_type") 
 									+ " " + session.getString("access_token"))
 							);
+					
 					scn = scenario("Test Suite # " 
 									+ ts.id + ":: " 
 									+ ts.HTTPmethod
 									+ " "
 									+ ts.uri.toString())
 									.exec(login,get);
-					scnList.add(scn.injectOpen(constantUsersPerSec(1).during(java.time.Duration.ofSeconds(1)))
+					scnList.add(scn.injectClosed(constantConcurrentUsers(ts.requestCount).during(java.time.Duration.ofSeconds(ts.testDuration)))
 			         .protocols(httpProtocol));
 					
 					break;
@@ -89,7 +94,6 @@ public class TestTwo extends Simulation {
 			    			.post(":8443/api/v2/login")
 			    			.header("content-type","application/json")
 			    			.body(StringBody(credentials))
-			    			//.check(status().is(200))
 			    			.check(jmesPath("access_token").ofString().saveAs("access_token"))
 			    		    .check(jmesPath("token_type").ofString().saveAs("token_type"))
 			    			 );
@@ -100,13 +104,14 @@ public class TestTwo extends Simulation {
 									+ " " + session.getString("access_token"))
 							.body(RawFileBody("postBody.json")).asJson()
 							);
+					
 					scn = scenario("Test Suite # " 
 							+ ts.id + ":: " 
 							+ ts.HTTPmethod
 							+ " "
 							+ ts.uri.toString())
 							.exec(login,post);
-					scnList.add(scn.injectOpen(constantUsersPerSec(1).during(java.time.Duration.ofSeconds(1)))
+					scnList.add(scn.injectClosed(constantConcurrentUsers(ts.requestCount).during(java.time.Duration.ofSeconds(ts.testDuration)))
 			         .protocols(httpProtocol));
 					
 					break;
@@ -117,7 +122,7 @@ public class TestTwo extends Simulation {
 	
 	{
 
-		testIterate();
+		runScenarios();
 		setUp(scnList)
         .protocols(httpProtocol);
 		

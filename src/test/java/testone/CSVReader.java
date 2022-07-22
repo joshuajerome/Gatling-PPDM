@@ -23,10 +23,11 @@ public class CSVReader {
 					Integer.parseInt(arr[0]),
 					arr[1],
 					Integer.parseInt(arr[2]),
-					arr[3],
+					HTTPMethod.valueOf(arr[3]),
 					Integer.parseInt(arr[4]),
 					Integer.parseInt(arr[5]),
-					HTTPMethod.valueOf(arr[6]),
+					arr[6],
+					Integer.parseInt(arr[6]),
 					arr[7]
 				);
 			}).collect(Collectors.toList());

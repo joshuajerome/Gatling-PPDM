@@ -15,14 +15,16 @@ public class TestSuite {
 	 int id;
 	 String restApiUri;
 	 int port;
-	 String ip;
+	 HTTPMethod HTTPmethod;
 	 int requestCount;
 	 int threadCount;
-	 HTTPMethod HTTPmethod;
 	 String requestBody;
+	 int testDuration; // **
+	 String ip;
+	 
 	 URI uri;
 
-	TestSuite (int id, String restApiUri, int port, String ip, int requestCount, int threadCount, HTTPMethod method, String body){
+	TestSuite (int id, String restApiUri, int port, HTTPMethod method, int requestCount, int threadCount, String body, int testDuration, String ip){
 		this.id = id;
 		this.restApiUri = restApiUri;
 		this.port = port;
@@ -30,7 +32,9 @@ public class TestSuite {
 		this.requestCount = requestCount;
 		this.threadCount = threadCount;
 		this.HTTPmethod = method;
-		this.requestBody = body;	
+		this.requestBody = body;
+		this.testDuration = testDuration;
+		
 		try {
 			this.uri = new URI("https://" + this.ip + ":" + this.port + this.restApiUri);
 		} catch (URISyntaxException e) {
