@@ -18,7 +18,7 @@ import java.util.ArrayList;
  * Not Hardcoding Login Credentials
  */
 
-public class TestTwo extends Simulation {
+public class Testing extends Simulation {
 	
 	/* VARS */
 	
