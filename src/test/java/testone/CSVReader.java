@@ -15,7 +15,7 @@ public class CSVReader {
 	public static List<TestSuite> processFile (String filename) {
 		Pattern pattern = Pattern.compile(",");
 		ClassLoader cl = Thread.currentThread().getContextClassLoader();
-		InputStream  fis = cl.getResourceAsStream(filename);
+		InputStream  fis = cl.getResourceAsStream(filename);	
 		try (Stream<String> lines = new BufferedReader(new InputStreamReader(fis)).lines()) {
 				tests = lines.map(line -> {
 				String[] arr = pattern.split(line);
@@ -27,10 +27,12 @@ public class CSVReader {
 					Integer.parseInt(arr[4]),
 					Integer.parseInt(arr[5]),
 					arr[6],
-					Integer.parseInt(arr[6]),
-					arr[7]
+					Integer.parseInt(arr[7]),
+					arr[8]
 				);
 			}).collect(Collectors.toList());
+				
+		System.out.println(lines);
 		} catch (Exception e) {
 			System.out.println("Caught exception: " + e.getMessage());
 		}

@@ -1,6 +1,6 @@
-1,/api/v3/infrastructure-objects,8580,10.235.46.217,10,10,GET,""
-2,/api/v3/assets,8580,10.235.46.217,10,10,GET,""
-3,/api/v3/application-systems,8580,10.235.46.217,10,10,GET,""
-4,/api/v3/inventory-sources,8580,10.235.46.217,10,10,GET,""
-5,/api/v3/network-hosts,8580,10.235.46.217,10,10,GET,""
-6,/api/v3/infrastructure-objects,8580,10.235.46.217,10,10,POST,"AppHostPost"
+1,/api/v3/infrastructure-objects,8580,GET,10,10,,5,10.235.46.217
+2,/api/v3/assets,8580,GET,10,10,,5,10.235.46.217
+3,/api/v3/application-systems,8580,GET,10,10,,5,10.235.46.217
+4,/api/v3/inventory-sources,8580,GET,10,10,,5,10.235.46.217
+5,/api/v3/network-hosts,8580,GET,10,10,,5,10.235.46.217
+6,/api/v3/infrastructure-objects,8580,POST,10,10,AppHostPost,5,10.235.46.217
