@@ -65,6 +65,7 @@ public class TestTwo extends Simulation {
 			credentials = getCredentials();
 		} catch (Exception e) {
 			System.out.println("Failed to Login");
+			return;
 		}
 		
 		login = exec(
