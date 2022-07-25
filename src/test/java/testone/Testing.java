@@ -60,6 +60,13 @@ public class Testing extends Simulation {
 		return credentials;
 	}
 	
+	/* JSON ID refresher */
+	
+	private void refreshID() {
+		JSONReader.refreshID();
+	}
+	
+	
 	private void login() {
 		
 		try {
@@ -137,6 +144,7 @@ public class Testing extends Simulation {
 	{
 		login();
 		runScenarios();
+		refreshID();
 		setUp(scnList)
         .protocols(httpProtocol);
 		
