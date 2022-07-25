@@ -15,6 +15,8 @@ import java.util.ArrayList;
  * 
  * Login only at start of test
  * Logout API
+ * read response
+ * unique host ids
  */
 
 public class Testing extends Simulation {
