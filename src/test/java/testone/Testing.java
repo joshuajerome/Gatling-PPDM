@@ -1,7 +1,6 @@
 package testone;
 
 /* Import Statements */
-
 import io.gatling.javaapi.core.*;
 import io.gatling.javaapi.http.*;
 
@@ -9,6 +8,10 @@ import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import com.google.gson.Gson;
 import java.util.ArrayList;
 
 /** TODO: 
@@ -23,7 +26,7 @@ public class Testing extends Simulation {
 	
 	/* VARS */
 	
-	private List<TestSuite> tests = CSVReader.processFile(getDataFile());
+	private List<TestSuite> tests = CSVReader.processFile(getDataFile("datafile"));
 	private List<PopulationBuilder> scnList= new ArrayList<>();
 	private String credentials;
 	
@@ -37,11 +40,11 @@ public class Testing extends Simulation {
 	
 	/* Get File */
 	
-	private String getDataFile() {
-		String datafile = System.getProperty("datafile");
+	private String getDataFile(String name) {
+		String datafile = System.getProperty(name);
 		
 		if (datafile == null || datafile.length() == 0) {
-			throw new RuntimeException("*** No Given File ***");
+			throw new RuntimeException("*** No Given " + name + " ***");
 		}
 		return datafile;
 	}
@@ -60,13 +63,6 @@ public class Testing extends Simulation {
 		return credentials;
 	}
 	
-	/* JSON ID refresher */
-	
-	private void refreshID() {
-		JSONReader.refreshID();
-	}
-	
-	
 	private void login() {
 		
 		try {
@@ -84,6 +80,24 @@ public class Testing extends Simulation {
     			.check(jmesPath("access_token").ofString().saveAs("access_token"))
     		    .check(jmesPath("token_type").ofString().saveAs("token_type"))
     			 );
+	}
+	
+	@SuppressWarnings("unchecked")
+	private List<String> getNewPost(String currentPost) {
+		String newPost;
+		List<String> val = new ArrayList<>();
+		try {
+			Gson gson = new Gson();
+			Map<?, ?> map = gson.fromJson(currentPost, Map.class);
+			Map<String, String> agentRef = (Map<String, String>)map.get("agentRef");
+			agentRef.put("id",UUID.randomUUID().toString());
+			newPost = gson.toJson(map);
+			val.add(agentRef.get("id"));
+			val.add(newPost);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return val;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -119,22 +133,25 @@ public class Testing extends Simulation {
 					
 				case POST:
 					
-					post = exec(http("HTTP Request: POST")
-							.post(":" + ts.port + ts.restApiUri)
-							.header("Authorization", session -> session.getString("token_type") 
-									+ " " + session.getString("access_token"))
-							.body(RawFileBody("postBody.json")).asJson()
-							);
-					
-					scn = scenario("Test Suite # " 
-							+ ts.id + "::" 
-							+ ts.HTTPmethod
-							+ " "
-							+ ts.uri.toString())
-							.exec(login,post);
-					scnList.add(scn.injectClosed(constantConcurrentUsers(ts.requestCount).during(java.time.Duration.ofSeconds(ts.testDuration)))
-			         .protocols(httpProtocol));
-					
+					for (int i = 0; i < ts.requestCount; i++) {
+						List<String> val = getNewPost(ts.requestBody);
+						post = exec(http("HTTP Request: POST")
+								.post(":" + ts.port + ts.restApiUri)
+								.header("Authorization", session -> session.getString("token_type") 
+										+ " " + session.getString("access_token"))
+								.body(StringBody(val.get(1))).asJson()
+								);
+						
+						scn = scenario("Test Suite # " 
+								+ ts.id + "::" 
+								+ ts.HTTPmethod
+								+ " "
+								+ ts.uri.toString()
+								+ " id: " + val.get(0))
+								.exec(login,post);
+						scnList.add(scn.injectClosed(constantConcurrentUsers(1).during(java.time.Duration.ofSeconds(ts.testDuration)))
+				         .protocols(httpProtocol));
+					}
 					break;
 			}
 			
@@ -143,8 +160,10 @@ public class Testing extends Simulation {
 	
 	{
 		login();
+//		JSONReader.processFile(getDataFile("jsonfile"));
+//		JSONReader.processFile(getDataFile("jsonfile"));
 		runScenarios();
-		refreshID();
+		
 		setUp(scnList)
         .protocols(httpProtocol);
 		

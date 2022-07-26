@@ -2,6 +2,10 @@ package testone;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Base64;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 enum HTTPMethod {
 	GET,
@@ -32,11 +36,13 @@ public class TestSuite {
 		this.requestCount = requestCount;
 		this.threadCount = threadCount;
 		this.HTTPmethod = method;
-		this.requestBody = body;
+//		this.requestBody = body;
 		this.testDuration = testDuration;
-		
 		try {
 			this.uri = new URI("https://" + this.ip + ":" + this.port + this.restApiUri);
+			byte[] decodedBytes = Base64.getDecoder().decode(body);
+			this.requestBody = new String(decodedBytes);
+			
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 	 	}
@@ -50,7 +56,9 @@ public class TestSuite {
 		sb.append("Request Count:" + requestCount + "\n");
 		sb.append("Thread Count:" + threadCount + "\n");	
 		sb.append("Method:" + HTTPmethod.toString() + "\n");
-		sb.append("Request Body:" + requestBody + "\n");
+//		sb.append("Request Body:" + requestBody + "\n");
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		sb.append("Request Body:" + gson.toJson(requestBody) + "\n");
 		return sb.toString();
 	}
 }
