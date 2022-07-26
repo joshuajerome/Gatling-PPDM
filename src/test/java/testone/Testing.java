@@ -145,7 +145,7 @@ public class Testing extends Simulation {
 								+ " "
 								+ ts.uri.toString()
 								+ " id: " + val.get(0))
-								.exec(login,post);
+								.exec(post);
 						scnList.add(scn.injectClosed(constantConcurrentUsers(1).during(java.time.Duration.ofSeconds(ts.testDuration)))
 						         .protocols(httpProtocol));
 					}
