@@ -18,8 +18,6 @@ import java.util.ArrayList;
  * 
  * Login only at start of test
  * Logout API
- * read response
- * unique host ids
  */
 
 public class Testing extends Simulation {
@@ -71,7 +69,6 @@ public class Testing extends Simulation {
 			System.out.println("Failed to Login");
 			return;
 		}
-		
 		login = exec(
     			http("login request")
     			.post(":8443/api/v2/login")
@@ -126,13 +123,13 @@ public class Testing extends Simulation {
 									+ " "
 									+ ts.uri.toString())
 									.exec(login,get);
-					scnList.add(scn.injectClosed(constantConcurrentUsers(ts.requestCount).during(java.time.Duration.ofSeconds(ts.testDuration)))
+					scnList.add(scn.injectClosed(rampConcurrentUsers(0).to(ts.requestCount).during(java.time.Duration.ofSeconds(ts.testDuration)))
 			         .protocols(httpProtocol));
 					
 					break;
 					
 				case POST:
-					
+
 					for (int i = 0; i < ts.requestCount; i++) {
 						List<String> val = getNewPost(ts.requestBody);
 						post = exec(http("HTTP Request: POST")
@@ -150,7 +147,7 @@ public class Testing extends Simulation {
 								+ " id: " + val.get(0))
 								.exec(login,post);
 						scnList.add(scn.injectClosed(constantConcurrentUsers(1).during(java.time.Duration.ofSeconds(ts.testDuration)))
-				         .protocols(httpProtocol));
+						         .protocols(httpProtocol));
 					}
 					break;
 			}
@@ -160,10 +157,7 @@ public class Testing extends Simulation {
 	
 	{
 		login();
-//		JSONReader.processFile(getDataFile("jsonfile"));
-//		JSONReader.processFile(getDataFile("jsonfile"));
-		runScenarios();
-		
+		runScenarios();	
 		setUp(scnList)
         .protocols(httpProtocol);
 		

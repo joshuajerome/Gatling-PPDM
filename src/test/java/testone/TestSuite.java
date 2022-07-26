@@ -36,7 +36,6 @@ public class TestSuite {
 		this.requestCount = requestCount;
 		this.threadCount = threadCount;
 		this.HTTPmethod = method;
-//		this.requestBody = body;
 		this.testDuration = testDuration;
 		try {
 			this.uri = new URI("https://" + this.ip + ":" + this.port + this.restApiUri);
