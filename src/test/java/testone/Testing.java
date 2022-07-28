@@ -10,9 +10,13 @@ import static io.gatling.javaapi.http.HttpDsl.*;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Supplier;
 
 import com.google.gson.Gson;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Collections;
+import java.util.stream.*;
 
 /** TODO: 
  * 
@@ -32,9 +36,12 @@ public class Testing extends Simulation {
 	
 	private HttpProtocolBuilder httpProtocol;
 	private ChainBuilder get;
-	private ChainBuilder post;
 	private ChainBuilder login;
-	private ScenarioBuilder scn;
+	private ScenarioBuilder loginScn;
+	private ScenarioBuilder postScn;
+	private ScenarioBuilder getScn;
+	private String access_token = null;
+	private String token_type = "";
 	
 	/* Get File */
 	
@@ -61,24 +68,6 @@ public class Testing extends Simulation {
 		return credentials;
 	}
 	
-	private void login() {
-		
-		try {
-			credentials = getCredentials();
-		} catch (Exception e) {
-			System.out.println("Failed to Login");
-			return;
-		}
-		login = exec(
-    			http("login request")
-    			.post(":8443/api/v2/login")
-    			.header("content-type","application/json")
-    			.body(StringBody(credentials))
-    			.check(jmesPath("access_token").ofString().saveAs("access_token"))
-    		    .check(jmesPath("token_type").ofString().saveAs("token_type"))
-    			 );
-	}
-	
 	@SuppressWarnings("unchecked")
 	private List<String> getNewPost(String currentPost) {
 		String newPost;
@@ -91,6 +80,7 @@ public class Testing extends Simulation {
 			newPost = gson.toJson(map);
 			val.add(agentRef.get("id"));
 			val.add(newPost);
+			System.out.println("Agent Id: " + agentRef.get("id") + "\n" + newPost);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -117,49 +107,78 @@ public class Testing extends Simulation {
 									+ " " + session.getString("access_token"))
 							);
 					
-					scn = scenario("Test Suite # " 
+					getScn = scenario("Test Suite # " 
 									+ ts.id + "::" 
 									+ ts.HTTPmethod
 									+ " "
 									+ ts.uri.toString())
 									.exec(login,get);
-					scnList.add(scn.injectClosed(rampConcurrentUsers(0).to(ts.requestCount).during(java.time.Duration.ofSeconds(ts.testDuration)))
+					scnList.add(getScn.injectClosed(rampConcurrentUsers(0).to(ts.requestCount).during(java.time.Duration.ofSeconds(ts.testDuration)))
 			         .protocols(httpProtocol));
 					
 					break;
 					
 				case POST:
-
-					for (int i = 0; i < ts.requestCount; i++) {
-						List<String> val = getNewPost(ts.requestBody);
-						post = exec(http("HTTP Request: POST")
-								.post(":" + ts.port + ts.restApiUri)
-								.header("Authorization", session -> session.getString("token_type") 
-										+ " " + session.getString("access_token"))
-								.body(StringBody(val.get(1))).asJson()
-								);
+					
+					  Iterator<Map<String, Object>> bodyFeeder =
+					  Stream.generate((Supplier<Map<String, Object>>) () -> {
+					      String body = getNewPost(ts.requestBody).get(1);
+					      return Collections.singletonMap("body", body);
+					    }
+					  ).iterator();
+					  
+					  Iterator<Map<String, Object>> authTokenFeeder =
+							  Stream.generate((Supplier<Map<String, Object>>) () -> {
+							      return Collections.singletonMap("token", access_token);
+							    }
+							  ).iterator();
+					  
+					  try {
+							credentials = getCredentials();
+						} catch (Exception e) {
+							return;
+						}
 						
-						scn = scenario("Test Suite # " 
+						loginScn = scenario("Login")
+								.exec(
+				    			http("login request")
+				    			.post(":8443/api/v2/login")
+				    			.header("content-type","application/json")
+				    			.body(StringBody(credentials))
+				    			.check(jmesPath("access_token").ofString().saveAs("access_token"))
+				    		    .check(jmesPath("token_type").ofString().saveAs("token_type"))
+				    			 )
+								.exec(session -> {
+									access_token = session.getString("access_token");
+									token_type = session.getString("token_type");
+								    return session;
+						            });
+						postScn = scenario("Test Suite # " 
 								+ ts.id + "::" 
 								+ ts.HTTPmethod
 								+ " "
-								+ ts.uri.toString()
-								+ " id: " + val.get(0))
-								.exec(post);
-						scnList.add(scn.injectClosed(constantConcurrentUsers(1).during(java.time.Duration.ofSeconds(ts.testDuration)))
-						         .protocols(httpProtocol));
-					}
-					break;
-			}
-			
-		});
+								+ ts.uri.toString())
+								.repeat(ts.requestCount, "index").on(
+										 feed(bodyFeeder)
+										.feed(authTokenFeeder)
+										.exec(http("HTTP Request: POST")
+												.post(":" + ts.port + ts.restApiUri)
+												.header("Authorization", "bearer" 
+														+ " " + "#{token}")
+												.body(StringBody("#{body}")).asJson()
+												));
+						scnList.add(loginScn.injectClosed(constantConcurrentUsers(1).during(java.time.Duration.ofSeconds(10)))
+						  .andThen(
+								  postScn.injectClosed(rampConcurrentUsers(1).to(ts.threadCount).during((java.time.Duration.ofSeconds(ts.testDuration))))
+							         .protocols(httpProtocol)));
+				
+				break;
+			}});
 	}
 	
 	{
-		login();
 		runScenarios();	
-		setUp(scnList)
-        .protocols(httpProtocol);
+		setUp(scnList).protocols(httpProtocol);
 		
 	}
 }
