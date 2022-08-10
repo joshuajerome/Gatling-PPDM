@@ -7,12 +7,16 @@ import java.util.Base64;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+/* Can incorporate several HTTP Verbs */
 enum HTTPMethod {
 	GET,
 	POST;
 }
 
-// Test Suite Class
+/* TestSuite Class 
+ * Decodes PostBody given as Base64 encryption
+ * Constructs TestSuite Object with unique CSV fields
+ */
 
 public class TestSuite {
 	
@@ -55,7 +59,6 @@ public class TestSuite {
 		sb.append("Request Count:" + requestCount + "\n");
 		sb.append("Thread Count:" + threadCount + "\n");	
 		sb.append("Method:" + HTTPmethod.toString() + "\n");
-//		sb.append("Request Body:" + requestBody + "\n");
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		sb.append("Request Body:" + gson.toJson(requestBody) + "\n");
 		return sb.toString();

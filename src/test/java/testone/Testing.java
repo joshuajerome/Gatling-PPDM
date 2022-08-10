@@ -30,18 +30,17 @@ public class Testing extends Simulation {
 	
 	/* VARS */
 	
+	/* Lists */
 	private List<TestSuite> tests = CSVReader.processFile(getDataFile("datafile"));
 	private List<PopulationBuilder> scnList= new ArrayList<>();
 	
-	
-	
+	/* Post Body Variables */
 	private String access_token = null;
 	private String token_type = "";
 	private String credentials;
-	private final AtomicInteger counter = new AtomicInteger(1);
+	private final AtomicInteger counter = new AtomicInteger(1);	
 	
 	/* Builders */
-	
 	private HttpProtocolBuilder httpProtocol;
 	private ChainBuilder get;
 	private ChainBuilder login;
@@ -60,6 +59,7 @@ public class Testing extends Simulation {
 		return datafile;
 	}
 	
+	
 	/* Get Login Credentials */
 	
 	private String getCredentials() throws Exception {
@@ -74,23 +74,32 @@ public class Testing extends Simulation {
 		return credentials;
 	}
 	
+	
+	/* Create New (Unique) Post Body */
+	
 	@SuppressWarnings("unchecked")
 	private String getNewPost(String currentPost) {
 		String newPost = "";
 		try {
+			
+			/* Converts JSON File to Java Map using GSON */
 			Gson gson = new Gson();
 			Map<?, ?> map = gson.fromJson(currentPost, Map.class);
 			
+			/* Creates unique agent ref ID */
 			Map<String, String> agentRef = (Map<String, String>)map.get("agentRef");
 			agentRef.put("id",UUID.randomUUID().toString());
 			
+			/* Creates & replaces unique naturalId */
 			ArrayList<String> naturalIds = (ArrayList<String>)map.get("naturalIds");
 			naturalIds.remove(0);
 			naturalIds.add(UUID.randomUUID().toString());
 			
+			/* Changes Application Host Name */
 			Map<String, String> temp = (Map<String, String>)map;
 			temp.replace("name", "Application Host " + counter.getAndIncrement());			
 			
+			/* Converts Java Map back to JSON File */
 			newPost = gson.toJson(map);
 			// System.out.println("Agent Id: " + agentRef.get("id") + "\n" + newPost);
 		} catch (Exception e) {
@@ -99,32 +108,52 @@ public class Testing extends Simulation {
 		return newPost;
 	}
 	
+	/* Main Gatling Test Script
+	 * runs all testing scenarios given via csv config
+	 */
+	
 	@SuppressWarnings("unchecked")
 	private void runScenarios() {
 		
-		
+		/* Streams on list of Test Suites */
 		tests.stream().forEach(ts -> {
 			
+			/* Establish HTTP Connection */
 			httpProtocol = HttpDsl.http
 					.baseUrl("https://" + ts.ip)
 					.acceptHeader("application/json")
 					.userAgentHeader("Gatling Performance Test");
 			
+			/* Switch on HTTP verb 
+			 * Currently only supports GET and POST 
+			 * Other verbs (PUT, DELETE, etc.) can be added via cases
+			 */
 			switch(ts.HTTPmethod) {
+			
+			/* TODO 
+			 * GET Currently not functional: 
+			 * runs several logins requests
+			 * need to implement bodyFeeder as done in POST case
+			 */
+			
+			/* HTTP verb: GET */
 				case GET:
 					
+					/* Initialize GET ChainBuilder with .get() */
 					get = exec(http("HTTP Request: GET")
 							.get(ts.uri.toString())
 							.header("Authorization", session -> session.getString("token_type") 
 									+ " " + session.getString("access_token"))
 							);
-					
+					/* Creates unique scenario for each GET*/
 					getScn = scenario("Test Suite # " 
 									+ ts.id + "::" 
 									+ ts.HTTPmethod
 									+ " "
 									+ ts.uri.toString())
 									.exec(login,get);
+					
+					/* Accumulate scenario into Population Builder List*/
 					scnList.add(getScn.injectClosed(rampConcurrentUsers(0).to(ts.requestCount).during(java.time.Duration.ofSeconds(ts.testDuration)))
 			         .protocols(httpProtocol));
 					
@@ -132,6 +161,9 @@ public class Testing extends Simulation {
 					
 				case POST:
 					
+					/* TODO
+					 * Ask Prabhash 
+					 */
 					  Iterator<Map<String, Object>> bodyFeeder =
 					  Stream.generate((Supplier<Map<String, Object>>) () -> {
 					      String body = getNewPost(ts.requestBody);
@@ -145,12 +177,14 @@ public class Testing extends Simulation {
 							    }
 							  ).iterator();
 					  
+					  /* Get credentials */
 					  try {
 							credentials = getCredentials();
 						} catch (Exception e) {
 							return;
 						}
 						
+					  /* Create login scenario */
 						loginScn = scenario("Login")
 								.exec(
 				    			http("login request")
@@ -165,6 +199,8 @@ public class Testing extends Simulation {
 									token_type = session.getString("token_type");
 								    return session;
 						            });
+						
+						/* Create post scenario */
 						postScn = scenario("Test Suite # " 
 								+ ts.id + "::" 
 								+ ts.HTTPmethod
@@ -179,6 +215,8 @@ public class Testing extends Simulation {
 														+ " " + "#{token}")
 												.body(StringBody("#{body}")).asJson()
 												));
+						
+						/* Add login scenario and then accumulate post scenarios into Population Builder List */
 						scnList.add(loginScn.injectClosed(constantConcurrentUsers(1).during(java.time.Duration.ofSeconds(1)))
 						  .andThen(
 								  postScn.injectClosed(rampConcurrentUsers(1).to(ts.threadCount).during((java.time.Duration.ofSeconds(ts.testDuration))))
@@ -188,6 +226,7 @@ public class Testing extends Simulation {
 			}});
 	}
 	
+	/* Runs all scenario within PopulationBuilder list */
 	{
 		runScenarios();	
 		setUp(scnList).protocols(httpProtocol);

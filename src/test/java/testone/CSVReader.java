@@ -10,6 +10,15 @@ import java.util.stream.Stream;
 
 public class CSVReader {
 	
+	/* CSV Reader Class
+	 * Gets file from given location
+	 * Parses file and puts into List of TestSuites
+	 * 
+	 * TODO
+	 * Give PostBody as Base64 encrypted String into CSV File
+	 * CSV reader cannot handle Raw PostBody: conflicts with comma splicing
+	 */
+	
 	private static List<TestSuite> tests;
 	
 	public static List<TestSuite> processFile (String filename) {
@@ -32,7 +41,6 @@ public class CSVReader {
 				);
 			}).collect(Collectors.toList());
 				is.close();
-//		System.out.println(lines);
 		} catch (Exception e) {
 			System.out.println("Caught exception: " + e.getMessage());
 		}
