@@ -24,8 +24,6 @@ import org.json.simple.JSONObject;
 
 /** TODO: 
  * 
- * Login only at start of test
- * Logout API
  */
 
 public class Testing extends Simulation {
@@ -34,6 +32,11 @@ public class Testing extends Simulation {
 	
 	private List<TestSuite> tests = CSVReader.processFile(getDataFile("datafile"));
 	private List<PopulationBuilder> scnList= new ArrayList<>();
+	
+	
+	
+	private String access_token = null;
+	private String token_type = "";
 	private String credentials;
 	private final AtomicInteger counter = new AtomicInteger(1);
 	
@@ -45,8 +48,6 @@ public class Testing extends Simulation {
 	private ScenarioBuilder loginScn;
 	private ScenarioBuilder postScn;
 	private ScenarioBuilder getScn;
-	private String access_token = null;
-	private String token_type = "";
 	
 	/* Get File */
 	
@@ -74,9 +75,8 @@ public class Testing extends Simulation {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private List<String> getNewPost(String currentPost) {
-		String newPost;
-		List<String> val = new ArrayList<>();
+	private String getNewPost(String currentPost) {
+		String newPost = "";
 		try {
 			Gson gson = new Gson();
 			Map<?, ?> map = gson.fromJson(currentPost, Map.class);
@@ -92,13 +92,11 @@ public class Testing extends Simulation {
 			temp.replace("name", "Application Host " + counter.getAndIncrement());			
 			
 			newPost = gson.toJson(map);
-			val.add(agentRef.get("id"));
-			val.add(newPost);
-			System.out.println("Agent Id: " + agentRef.get("id") + "\n" + newPost);
+			// System.out.println("Agent Id: " + agentRef.get("id") + "\n" + newPost);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return val;
+		return newPost;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -136,7 +134,7 @@ public class Testing extends Simulation {
 					
 					  Iterator<Map<String, Object>> bodyFeeder =
 					  Stream.generate((Supplier<Map<String, Object>>) () -> {
-					      String body = getNewPost(ts.requestBody).get(1);
+					      String body = getNewPost(ts.requestBody);
 					      return Collections.singletonMap("body", body);
 					    }
 					  ).iterator();
@@ -181,7 +179,7 @@ public class Testing extends Simulation {
 														+ " " + "#{token}")
 												.body(StringBody("#{body}")).asJson()
 												));
-						scnList.add(loginScn.injectClosed(constantConcurrentUsers(1).during(java.time.Duration.ofSeconds(10)))
+						scnList.add(loginScn.injectClosed(constantConcurrentUsers(1).during(java.time.Duration.ofSeconds(1)))
 						  .andThen(
 								  postScn.injectClosed(rampConcurrentUsers(1).to(ts.threadCount).during((java.time.Duration.ofSeconds(ts.testDuration))))
 							         .protocols(httpProtocol)));
