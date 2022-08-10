@@ -1,53 +1,20 @@
-{ 
-
-"naturalIds": [ 
-
-"77z9227d-964a-4069-a958-81b4971a04359" 
-
-], 
-
-"name": "Application Host 1", 
-
-"type": "GENERIC_APPLICATION_HOST", 
-
-"categories": [ 
-
-"APPLICATION_HOST", 
-
-"APPLICATION_SYSTEM" 
-
-], 
-
-"vendor": "GENERIC", 
-
-"version": "current version", 
-
-"discoveredAt": "2021-03-29T23:04:01.007Z", 
-
-"discoveryStatus": "AVAILABLE", 
-
-"hostname": "test.asl.lab.emc.com", 
-
-"addresses": [{ 
-
-"value": "10.25.145.12", 
-
-"type": "IPV4" 
-
-}], 
-
-"availabilityStatus": { 
-
-"value": "AVAILABLE", 
-
-"changedAt": null 
-
-}, 
-
-"agentRef": { 
-
-"id": "77z9227d-964a-4069-a958-81b4971a04778" 
-
-} 
-
-} 
+{
+    "naturalIds": ["77z9227d-964a-4069-a958-81b4971a04778"],
+    "name": "Application Host 1",
+    "type": "GENERIC_APPLICATION_HOST",
+    "categories": ["APPLICATION_HOST","APPLICATION_SYSTEM"],
+    "vendor": "GENERIC",
+    "version": "currentversion",
+    "discoveredAt": "2021-03-29T23:04:01.007Z",
+    "discoveryStatus": "AVAILABLE",
+    "hostname": "test.asl.lab.emc.com",
+    "addresses": [{
+        "value": "10.25.145.12",
+        "type": "IPV4"
+    }],
+    "availabilityStatus":{
+        "value": "AVAILABLE",
+        "changedAt": null
+    },
+    "agentRef": {"id": "77z9227d-964a-4069-a958-81b4971a04778"}
+}
