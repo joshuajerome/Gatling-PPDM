@@ -10,6 +10,7 @@ import static io.gatling.javaapi.http.HttpDsl.*;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
 import com.google.gson.Gson;
@@ -17,6 +18,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Collections;
 import java.util.stream.*;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /** TODO: 
  * 
@@ -31,6 +35,7 @@ public class Testing extends Simulation {
 	private List<TestSuite> tests = CSVReader.processFile(getDataFile("datafile"));
 	private List<PopulationBuilder> scnList= new ArrayList<>();
 	private String credentials;
+	private final AtomicInteger counter = new AtomicInteger(1);
 	
 	/* Builders */
 	
@@ -75,8 +80,17 @@ public class Testing extends Simulation {
 		try {
 			Gson gson = new Gson();
 			Map<?, ?> map = gson.fromJson(currentPost, Map.class);
+			
 			Map<String, String> agentRef = (Map<String, String>)map.get("agentRef");
 			agentRef.put("id",UUID.randomUUID().toString());
+			
+			ArrayList<String> naturalIds = (ArrayList<String>)map.get("naturalIds");
+			naturalIds.remove(0);
+			naturalIds.add(UUID.randomUUID().toString());
+			
+			Map<String, String> temp = (Map<String, String>)map;
+			temp.replace("name", "Application Host " + counter.getAndIncrement());			
+			
 			newPost = gson.toJson(map);
 			val.add(agentRef.get("id"));
 			val.add(newPost);
