@@ -19,9 +19,6 @@ import java.util.Iterator;
 import java.util.Collections;
 import java.util.stream.*;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-
 /** TODO: 
  * 
  */
@@ -101,7 +98,7 @@ public class Testing extends Simulation {
 			
 			/* Converts Java Map back to JSON File */
 			newPost = gson.toJson(map);
-			// System.out.println("Agent Id: " + agentRef.get("id") + "\n" + newPost);
+			System.out.println("Agent Id: " + agentRef.get("id") + "\n" + newPost);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
