@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.stream.*;
 
 /** TODO: 
@@ -30,6 +31,7 @@ public class Testing extends Simulation {
 	/* Lists */
 	private List<TestSuite> tests = CSVReader.processFile(getDataFile("datafile"));
 	private List<PopulationBuilder> scnList= new ArrayList<>();
+	HashSet<String> bucket = new HashSet<>();
 	
 	/* Post Body Variables */
 	private String access_token = null;
@@ -71,6 +73,16 @@ public class Testing extends Simulation {
 		return credentials;
 	}
 	
+	private String generateUUID() {
+		String id = UUID.randomUUID().toString();
+		while (bucket.contains(id)) {
+			id = UUID.randomUUID().toString();
+		}
+		bucket.add(id);
+		return id;
+		
+	}
+	
 	
 	/* Create New (Unique) Post Body */
 	
@@ -85,12 +97,12 @@ public class Testing extends Simulation {
 			
 			/* Creates unique agent ref ID */
 			Map<String, String> agentRef = (Map<String, String>)map.get("agentRef");
-			agentRef.put("id",UUID.randomUUID().toString());
+			agentRef.put("id",generateUUID());
 			
 			/* Creates & replaces unique naturalId */
 			ArrayList<String> naturalIds = (ArrayList<String>)map.get("naturalIds");
 			naturalIds.remove(0);
-			naturalIds.add(UUID.randomUUID().toString());
+			naturalIds.add(generateUUID());
 			
 			/* Changes Application Host Name */
 			Map<String, String> temp = (Map<String, String>)map;
@@ -98,7 +110,7 @@ public class Testing extends Simulation {
 			
 			/* Converts Java Map back to JSON File */
 			newPost = gson.toJson(map);
-			System.out.println("Agent Id: " + agentRef.get("id") + "\n" + newPost);
+			// System.out.println("Agent Id: " + agentRef.get("id") + "\n" + newPost);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -158,8 +170,7 @@ public class Testing extends Simulation {
 					
 				case POST:
 					
-					/* TODO
-					 * Ask Prabhash 
+					/* Makes sure that there are unique bodies for each request
 					 */
 					  Iterator<Map<String, Object>> bodyFeeder =
 					  Stream.generate((Supplier<Map<String, Object>>) () -> {
