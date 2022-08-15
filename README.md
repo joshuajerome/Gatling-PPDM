@@ -42,3 +42,4 @@ git clone https://github.com/joshuajerome/Gatling-PPDM.git
 ## Credits
 This tool was developed by **Yuxin Huang**, **Joshua Jerome**, **Kevin Kodama**, and **Edward Xia** under the supervision of **Hadi Abdo**, **Prabhash Krishnan**, and **Thao Pham**. All rights to this project belong to **Dell Technologies** 
 
+https://dell.zoom.us/j/91201385979?pwd=R1JEamtxZjlzOVZMZW1SZzJ4U0dOdz09
