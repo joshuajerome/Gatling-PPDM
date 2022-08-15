@@ -17,7 +17,6 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.stream.*;
 
 /** TODO: 
@@ -31,7 +30,6 @@ public class Testing extends Simulation {
 	/* Lists */
 	private List<TestSuite> tests = CSVReader.processFile(getDataFile("datafile"));
 	private List<PopulationBuilder> scnList= new ArrayList<>();
-	HashSet<String> bucket = new HashSet<>();
 	
 	/* Post Body Variables */
 	private String access_token = null;
@@ -71,18 +69,7 @@ public class Testing extends Simulation {
 	    		+ "\",\"password\":\"" 
 	    		+ password + "\"}";
 		return credentials;
-	}
-	
-	private String generateUUID() {
-		String id = UUID.randomUUID().toString();
-		while (bucket.contains(id)) {
-			id = UUID.randomUUID().toString();
-		}
-		bucket.add(id);
-		return id;
-		
-	}
-	
+	}	
 	
 	/* Create New (Unique) Post Body */
 	
@@ -97,12 +84,12 @@ public class Testing extends Simulation {
 			
 			/* Creates unique agent ref ID */
 			Map<String, String> agentRef = (Map<String, String>)map.get("agentRef");
-			agentRef.put("id",generateUUID());
+			agentRef.put("id",UUID.randomUUID().toString());
 			
 			/* Creates & replaces unique naturalId */
 			ArrayList<String> naturalIds = (ArrayList<String>)map.get("naturalIds");
 			naturalIds.remove(0);
-			naturalIds.add(generateUUID());
+			naturalIds.add(UUID.randomUUID().toString());
 			
 			/* Changes Application Host Name */
 			Map<String, String> temp = (Map<String, String>)map;
