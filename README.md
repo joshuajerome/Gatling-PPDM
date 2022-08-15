@@ -28,7 +28,7 @@ flowchart TD;
     G["-Ddatafile"]-->H["CSV config file"];
     I["-Dusername / -Dpassword"]-->J["API login credentials"];
 ```
-Datafile is a _**CSV**_ config file with following parameters:
+**datafile** is a _**csv**_ config file with the following parameters:
 
 Test Suite #|REST API URI|Port #|HTTP Verb|Request Count|User/Thread Count|Request Bodies (.json)|Test Duration|IP Address
 ---|---|---|---|---|---|---|---|---
