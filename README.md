@@ -35,6 +35,11 @@ Test Suite #|REST API URI|Port #|HTTP Verb|Request Count|User/Thread Count|Reque
 
 _Request Bodies are only required for HTTP Verb: POST_
 
+**Example CSV**:
+```
+1,/some/uri/path,80,GET,10,50,,12.345.67.891
+2,/another/uri/path,443,POST,10,50,postBody.json,12.345.67.891
+```
 ### Installation
 1. Clone the repo
 ```
