@@ -30,6 +30,6 @@ git clone https://github.com/joshuajerome/Gatling-PPDM.git
 4. Execute 
       - _**run.bat**_ script (Windows)
       - _**run.sh**_ script (Mac)
-
+https://dell.zoom.us/j/99571143197?pwd=YjN2a210RU1aY1dCbzNwVDFiNndxUT09#success
 
 
