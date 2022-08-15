@@ -11,36 +11,60 @@ Gatling PPDM (Power Protect Data Manager) is a Maven Gatling project that assess
 ## Getting Started
 This project does not require any external dependency download. All dependencies can be found within _**pom.xml**_.
 
+### Project Stucture
+```bash
+├── Gatling-PPDM
+│   ├── src
+│   │   ├── main
+│   ├── favicon.ico
+│   ├── images
+│   ├── index.html
+│   ├── js
+│   │   ├── **/*.js
+│   └── partials/template
+├── dist (or build)
+├── node_modules
+├── bower_components (if using bower)
+├── test
+├── Gruntfile.js/gulpfile.js
+├── README.md
+├── package.json
+├── bower.json (if using bower)
+└── .gitignore
+```
+
 ### Prerequisites
 Gatling PPDM includes a command line script (_**run.bat**_) to improve its automation capabilities.
 Requirements for this project include an updated _**run.bat**_ script and correctly formatted _**datafile.csv**_ file (see below).
 
-_**run.bat**_ script:
-```
-@mvn gatling:test -Dgatling.simulationClass=packageName.className -Ddatafile="datafile.csv" -Dusername="username" -Dpassword="password"
-```
-```mermaid
-flowchart TD;
-    A["@"]-->B["hides print of
-    run.bat script"];
-    C["mvn gatling:test"]-->D["runs gatling script with 
-    maven build tool."];
-    E["-DgatlingSimulationClass=packageName.className"]-->F["specifies class to be run"];
-    G["-Ddatafile"]-->H["CSV config file"];
-    I["-Dusername / -Dpassword"]-->J["API login credentials"];
-```
-**datafile.csv** is a config file with the following parameters:
+- _**run.bat**_ script:
+    ```
+    @mvn gatling:test -Dgatling.simulationClass=packageName.className -Ddatafile="datafile.csv" -Dusername="username" -Dpassword="password"
+    ```
+    ```mermaid
+    flowchart TD;
+        A["@"]-->B["hides print of
+        run.bat script"];
+        C["mvn gatling:test"]-->D["runs gatling script with 
+        maven build tool."];
+        E["-DgatlingSimulationClass=packageName.className"]-->F["specifies class to be run"];
+        G["-Ddatafile"]-->H["CSV config file"];
+        I["-Dusername / -Dpassword"]-->J["API login credentials"];
+    ```
+- _**datafile.csv**_ is a configuration file with the following parameters:
 
-Test Suite #|REST API URI|Port #|HTTP Verb|Request Count|User/Thread Count|Request Bodies (.json)|Test Duration|IP Address
----|---|---|---|---|---|---|---|---
+    Test Suite #|REST API URI|Port #|HTTP Verb|Request Count|User/Thread Count|Request Bodies (.json)|Test Duration|IP Address
+    ---|---|---|---|---|---|---|---|---
 
-_Request Bodies are only required for HTTP Verb: POST_
+    _Request Bodies are only required for HTTP Verb: POST_
 
-**Example CSV**:
-```
-1,/some/uri/path,80,GET,10,50,,12.345.67.891
-2,/another/uri/path,443,POST,10,50,postBody.json,12.345.67.891
-```
+    **Example CSV**:
+    ```
+    1,/some/uri/path,80,GET,10,50,,12.345.67.891
+    2,/another/uri/path,443,POST,10,50,postBody.json,12.345.67.891
+    ```
+Configuration files must be placed into **src/test/resources** folder within the project
+
 ### Installation
 1. Clone the repo
 ```
