@@ -13,6 +13,7 @@ This project does not require any external dependency download. All dependencies
 
 ### Prerequisites
 Gatling PPDM includes a command line script (_**run.bat**_) to improve its automation capabilities.
+Requirements for this project include an updated _**run.bat**_ script and correctly formatted _**datafile.csv**_ file (see below).
 
 _**run.bat**_ script:
 ```
@@ -28,7 +29,7 @@ flowchart TD;
     G["-Ddatafile"]-->H["CSV config file"];
     I["-Dusername / -Dpassword"]-->J["API login credentials"];
 ```
-**datafile** is a _**csv**_ config file with the following parameters:
+**datafile.csv** is a config file with the following parameters:
 
 Test Suite #|REST API URI|Port #|HTTP Verb|Request Count|User/Thread Count|Request Bodies (.json)|Test Duration|IP Address
 ---|---|---|---|---|---|---|---|---
