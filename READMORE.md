@@ -525,9 +525,25 @@ _**Confidential**_ --> **PPDM uris are for confidential internal use only.**
 ### src/test/resources
 
 - ### data.csv
-
+	_**data.csv**_ is the configuration file passed into **CSVReader** and is required for the functionality of this project. For instructions and examples on how to format _**data.csv**_, see [prequisites](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#prerequisites). 
 - ### postBody.json
-
+_**postBody.json**_ is the request body required for **POST** requests. Below is an example postBody.json.
+```json
+{
+    "naturalIds": ["78414903-fa02-40f4-a9cc-ccd9051fc985"],
+    "name": "name 1",
+    "type": "type",
+    "categories": ["category1","category2"],
+    "version": "version",
+    "hostname": "some.host.name.com",
+    "addresses": [{
+        "value": "12.23.456.78",
+        "type": "XCV1"
+    }],
+    "agentRef": {"id": "48f63618-014b-42fb-a688-96ce446ad5cd"}
+}
+```
+>__Note__ the following fields are used within **Testing** class: naturalIds, name, agentRef.
 - ### gatling.conf
 
 - ### recorder.conf
@@ -537,7 +553,7 @@ _**Confidential**_ --> **PPDM uris are for confidential internal use only.**
 - ### pom.xml
 
 - ### run.bat
-
+	_**run.bat**_ is the batch script on which the project runs and is required for the functionality of this project. For instructions and examples on how to format _**run.bat**_, see [prequisites](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#prerequisites). 
 - ### test.eml
 
 - ### test.userlibraries
