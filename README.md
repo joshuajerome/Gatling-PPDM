@@ -41,11 +41,11 @@ This project does not require any external dependency download. All dependencies
 ```
 ### Prerequisites
 Gatling PPDM includes a command line script (_**run.bat**_) to improve its automation capabilities.
-Requirements for this project include an updated _**run.bat**_ script and correctly formatted _**datafile.csv**_ file (see below).
+Requirements for this project include an updated _**run.bat**_ script and correctly formatted _**data.csv**_ file (see below).
 
 - _**run.bat**_ script:
     ```
-    @mvn gatling:test -Dgatling.simulationClass=packageName.className -Ddatafile="datafile.csv" -Dusername="username" -Dpassword="password"
+    @mvn gatling:test -Dgatling.simulationClass=packageName.className -Ddatafile="data.csv" -Dusername="username" -Dpassword="password"
     ```
     ```mermaid
     flowchart TD;
@@ -57,7 +57,7 @@ Requirements for this project include an updated _**run.bat**_ script and correc
         G["-Ddatafile"]-->H["CSV config file"];
         I["-Dusername / -Dpassword"]-->J["API login credentials"];
     ```
-- _**datafile.csv**_ is a configuration file with the following parameters:
+- _**data.csv**_ is a configuration file with the following parameters:
 
     Test Suite #|REST API URI|Port #|HTTP Verb|Request Count|User/Thread Count|Request Bodies (.json)|Test Duration|IP Address
     ---|---|---|---|---|---|---|---|---
@@ -69,8 +69,7 @@ Requirements for this project include an updated _**run.bat**_ script and correc
     1,/some/uri/path,80,GET,10,50,,12.345.67.891
     2,/another/uri/path,443,POST,10,50,postBody.json,12.345.67.891
     ```
-> __Note__
-Configuration files must be placed into **src/test/resources** folder within the project or else they cannot be accessed
+> __Note__ Configuration files must be placed into **src/test/resources** folder within the project or else they cannot be accessed
 
 ### Installation
 1. Clone the repo
