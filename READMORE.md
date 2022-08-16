@@ -70,6 +70,8 @@ flowchart LR;
 - JMeter team additionally required the use of git-bash to execute their command line scripts.
 - Both sub-projects were incorporated into the team's Jenkins pipeline.
 
+[(back to top)](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#gatling-ppdm-further-documentation)
+
 ### Project Stucture
 
 - Tree Diagram
@@ -101,6 +103,8 @@ flowchart LR;
   ├── README.md
   └── .gitignore
   ```
+[(back to top)](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#gatling-ppdm-further-documentation)
+  
 ### Prerequisites
 Gatling PPDM includes a command line script (_**run.bat**_) to improve its automation capabilities.
 Requirements for this project include an updated _**run.bat**_ script and correctly formatted _**data.csv**_ file (see below).
@@ -144,6 +148,8 @@ git clone https://github.com/joshuajerome/Gatling-PPDM.git
 4. Execute 
       - _**run.bat**_ script (Windows)
       - _**run.sh**_ script (Mac)
+
+[(back to top)](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#gatling-ppdm-further-documentation)
 
 ## Packages
 
@@ -213,6 +219,9 @@ Default package comes with all Gatling projects.
 	}
 	```  
 For the purposes of this project, the Recorder GUI was not used, as the requests made were highly customized. 
+
+[(back to top)](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#gatling-ppdm-further-documentation)
+
 ### testone
 Package created for simulation class development. 
 
@@ -279,6 +288,8 @@ For POST requests, TestSuite class allows for two different methods of storing t
   ```
 Currently, file reading method is implemented as encrypting a request body within _**data.csv**_ seemed to minutely slow down the automation process.
 
+[(back to top)](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#gatling-ppdm-further-documentation)
+
 - ### CSVReader.java
 
 **CSVReader** streams on _**data.csv**_ and splits the file by lines. Each line is then passed into the **TestSuite** constructor, and all **TestSuite** objects are collected into a list of test suites.
@@ -318,6 +329,8 @@ public static List<TestSuite> processFile (String filename) {
 ```
 >__Note__ CSVReader works exclusively with the TestSuite constructor.
 > To advocate for more parameters in this model, we would need to add a new field to the TestSuite constructor.
+
+[(back to top)](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#gatling-ppdm-further-documentation)
 
 - ### Testing.java
 
@@ -520,6 +533,8 @@ Ultimately, gatling is packaged with a ```setUp()``` method that takes in a Popu
 ```
 _**Confidential**_ --> **PPDM uris are for confidential internal use only.**
 
+[(back to top)](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#gatling-ppdm-further-documentation)
+
 ### src/test/resources
 This directory contains all the resources used within the project.
 - ### data.csv
@@ -546,6 +561,9 @@ This directory contains all the resources used within the project.
 	**gatling.conf** is a user-customizable configuration file created by Gatling which offers several customizations. Visit [gatling.conf](https://github.com/joshuajerome/Gatling-PPDM/blob/master/src/test/resources/gatling.conf) to view this file.
 - ### recorder.conf
 	**recorder.conf** is a user-customizable configuration file created by Gatling which offers serveral customizations. Visit [recorder.conf](https://github.com/joshuajerome/Gatling-PPDM/blob/master/src/test/resources/recorder.conf) to view this file.
+
+[(back to top)](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#gatling-ppdm-further-documentation)
+
 ### target
 
 - ### pom.xml
@@ -574,8 +592,8 @@ This directory contains all the resources used within the project.
 - ### run.bat
 	_**run.bat**_ is the batch script on which the project runs and is required for the functionality of this project. For instructions and examples on how to format _**run.bat**_, see [prequisites](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#prerequisites). 
 
-_[back to top](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#gatling-ppdm-further-documentation)_
+[(back to top)](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#gatling-ppdm-further-documentation)
 
-## Credits
+## Credits 
 This tool was developed by **Yuxin Huang**, **Joshua Jerome**, **Kevin Kodama**, and **Edward Xia** under the supervision of **Hadi Abdo**, **Prabhash Krishnan**, and **Thao Pham**. All rights to this project belong to **Dell Technologies** 
 
