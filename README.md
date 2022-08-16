@@ -8,6 +8,8 @@
 
 Gatling PPDM (Power Protect Data Manager) is a Maven Gatling project that assess the performance of different APIs hosted by the APSS microservice running on the PPDM server.
 
+For a more detailed description of this project, see [further documentation](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#gatling-ppdm)
+
 ## Getting Started
 This project does not require any external dependency download. All dependencies can be found within _**pom.xml**_.
 
