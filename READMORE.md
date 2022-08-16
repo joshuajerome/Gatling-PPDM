@@ -303,7 +303,7 @@ private String getCredentials() throws Exception {
 For **POST** requests specifically, recall that request bodies are necessary. With respect to the APIs hosted by APSS microservice, **POST** request bodies contain an _**agent reference ID**_, a _**natural ID**_, and a _**name**_. **IDs** are stored as UUIDs, and the **name** is stored as a String. Each of these fields must be unique for every **POST** request that hits the PPDM server. Thus, a new request body (or post body) must be generated for each request.
 
 The following code generates a new post body:
-```
+```java
 private String getNewPost(String currentPost) {
 	String newPost = "";
 	try {
@@ -335,6 +335,26 @@ private String getNewPost(String currentPost) {
 ```
 The first block of code within the try block introduces the first external dependency used within the project: GSON, a java library created by Google. See [dependencies](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#target) for more on GSON.
 
+**getNewPost()** method is called within a function called **runScenarios**. 
+
+This function:
+1. streams on the list of TestSuite
+2. establishes a HTTP connection to PPDM server
+3. performs HTTP requests based on the HTTP verb
+
+Stream:
+```
+private void runScenarios() {
+	tests.stream().forEach(ts -> { ... }
+}
+```
+Establish HTTP connection:
+```
+httpProtocol = HttpDsl.http
+		.baseUrl("https://" + ts.ip)
+		.acceptHeader("application/json")
+		.userAgentHeader("Gatling Performance Test");
+```
 ### src/test/resources
 
 - ### data.csv
