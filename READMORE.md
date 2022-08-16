@@ -103,24 +103,6 @@ flowchart LR;
   ├── README.md
   └── .gitignore
   ```
-- Flow Chart Diagram
-  ```mermaid
-  flowchart TD;
-  A["Gatling PPDM"]-->B["src"]
-  A["Gatling PPDM"]-->C["target"]
-  B["src"]-->D["main"]
-  B["src"]-->E["test"]
-  D["main"]-->F["java"]
-  E["test"]-->G["java"]
-  G["Java"]-->H["(default package)"]
-  G["Java"]-->I["testone"]
-  E["test"]-->J["resources"]
-  I["testone"]-->K["Testing.java"]
-  I["testone"]-->L["TestSuite.java"]
-  I["testone"]-->M["CSVReader.java"]
-  J["resources"]
-  ```
-
 ### Prerequisites
 Gatling PPDM includes a command line script (_**run.bat**_) to improve its automation capabilities.
 Requirements for this project include an updated _**run.bat**_ script and correctly formatted _**data.csv**_ file (see below).
@@ -171,7 +153,7 @@ git clone https://github.com/joshuajerome/Gatling-PPDM.git
 This directory contains all Java packages.
 
 ### (default package)
-Default package that comes with all Gatling projects.  
+Default package comes with all Gatling projects.  
 
 - #### Engine.java
 
@@ -182,11 +164,71 @@ Default package that comes with all Gatling projects.
 ### testone
 Package created for simulation class development. 
 
-- #### Testing.java
-
 - #### TestSuite.java
 
+_**data.csv**_ file is a collection of Test Suites, and each Test Suite has several parameters. This scenario can be viewed object-orientedly by making a TestSuite class and the remaining parameters properties of that class. 
+
+Each test suite will instantiate TestSuite through the following constructor:
+
+```java
+TestSuite (int id, String restApiUri, int port, HTTPMethod method, int requestCount, int threadCount, String body, int testDuration, String ip) 
+{
+  ...
+}
+```
+
+Considering HTTP verbs as types, a HTTPMethod enumeration is created for all HTTP verbs:
+
+```java
+/* Can incorporate several HTTP Verbs */
+
+enum HTTPMethod {
+	GET,
+	POST;
+}
+```
+
+For POST requests, TestSuite class allows for two different methods of storing the necessary request body.
+
+1. Base 64 decryption:
+
+  Input to _**data.csv**_ request body must be a Base 64 _**encryption**_ of the entire body. 
+  ```java
+  byte[] decodedBytes = Base64.getDecoder().decode(body);
+  this.requestBody = new String(decodedBytes);
+  ```
+2. File Reading:
+
+  Input to _**data.csv**_ request body must be the filename _**and**_ must be located within the _**src/test/resources**_ folder.
+  ```java
+      try {
+        StringBuilder sb = new StringBuilder();
+        ClassLoader cl = Thread.currentThread().getContextClassLoader();
+        InputStream  is = cl.getResourceAsStream(body);	
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+        String read;
+        try {
+          while((read = br.readLine()) != null) {
+            sb.append(read);
+          }
+        }
+        catch(Exception e) {
+          e.printStackTrace();
+        }
+        this.requestBody = sb.toString();
+      }
+      catch(Exception e) {
+        e.printStackTrace();
+      }
+  ```
+
 - #### CSVReader.java
+
+- #### Testing.java
+
+```
+
+```
 
 ### src/test/resources
 
