@@ -18,9 +18,9 @@
       - IDEPathHelper.java
       - Recorder.java
     - [testone](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#testone)  
-      - Testing.java
       - TestSuite.java
       - CSVReader.java
+      - Testing.java
   - [src/test/resources](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#srctestresources)
     - data.csv
     - postBody.json
