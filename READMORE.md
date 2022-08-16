@@ -27,7 +27,7 @@
     - gatling.conf
     - recorder.conf 
   - [target](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#target)
-    - pom.xml
+    - pom.xml (dependencies)
     - run.bat
     - test.eml
     - test.userLibraries
@@ -269,9 +269,71 @@ public static List<TestSuite> processFile (String filename) {
 
 - ### Testing.java
 
-```
+**Testing** class is where all simulation code is written.
 
+**Testing** first gets _**data.csv**_ and stores all test suites into a list:
+```java
+private List<TestSuite> tests = CSVReader.processFile(getDataFile("datafile"));
+
+private String getDataFile(String name) {
+	String datafile = System.getProperty(name);
+
+	if (datafile == null || datafile.length() == 0) {
+		throw new RuntimeException("*** No Given " + name + " ***");
+	}
+	return datafile;
+}
 ```
+Next, **Testing** tries to grab user authetication credentials:
+```java
+private String credentials;
+
+private String getCredentials() throws Exception {
+	String username = System.getProperty("username");
+	String password = System.getProperty("password");
+	if (username == null || password == null) {
+		throw new Exception("missing credentials");
+	}
+	String credentials = "{\"username\":\"" + username
+		+ "\",\"password\":\"" 
+		+ password + "\"}";
+	return credentials;
+}	
+```
+For **POST** requests specifically, recall that request bodies are necessary. With respect to the APIs hosted by APSS microservice, **POST** request bodies contain an _**agent reference ID**_, a _**natural ID**_, and a _**name**_. **IDs** are stored as UUIDs, and the **name** is stored as a String. Each of these fields must be unique for every **POST** request that hits the PPDM server. Thus, a new request body (or post body) must be generated for each request.
+
+The following code generates a new post body:
+```
+private String getNewPost(String currentPost) {
+	String newPost = "";
+	try {
+		/* Converts JSON File to Java Map using GSON */
+		Gson gson = new Gson();
+		Map<?, ?> map = gson.fromJson(currentPost, Map.class);
+
+		/* Creates unique agent ref ID */
+		Map<String, String> agentRef = (Map<String, String>)map.get("agentRef");
+		agentRef.put("id",UUID.randomUUID().toString());
+
+		/* Creates & replaces unique naturalId */
+		ArrayList<String> naturalIds = (ArrayList<String>)map.get("naturalIds");
+		naturalIds.remove(0);
+		naturalIds.add(UUID.randomUUID().toString());
+
+		/* Changes Application Host Name */
+		Map<String, String> temp = (Map<String, String>)map;
+		temp.replace("name", "Application Host " + counter.getAndIncrement());			
+
+		/* Converts Java Map back to JSON File */
+		newPost = gson.toJson(map);
+		// System.out.println("Agent Id: " + agentRef.get("id") + "\n" + newPost);
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+	return newPost;
+}
+```
+The first block of code within the try block introduces the first external dependency used within the project: GSON, a java library created by Google. See [dependencies](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#target) for more on GSON.
 
 ### src/test/resources
 
