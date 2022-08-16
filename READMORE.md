@@ -265,8 +265,7 @@ public static List<TestSuite> processFile (String filename) {
 }
 ```
 >__Note__ CSVReader works exclusively with the TestSuite constructor.
-
-
+> To advocate for more parameters in this model, we would need to add a new field to the TestSuite constructor.
 
 - ### Testing.java
 
