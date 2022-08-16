@@ -407,10 +407,10 @@ httpProtocol = HttpDsl.http
 		.acceptHeader("application/json")
 		.userAgentHeader("Gatling Performance Test");
 ```
-A new HTTP connection is required for each TestSuite. Lack of HTTP Connection results in a [socket timeout exception](https://docs.oracle.com/javase/7/docs/api/java/net/SocketTimeoutException.html).
+A new HTTP connection is required for each **TestSuite**. Lack of HTTP Connection results in a [socket timeout exception](https://docs.oracle.com/javase/7/docs/api/java/net/SocketTimeoutException.html).
 A switch statement switches on HTTPmethod for each test suite.
 
-HTTP Verb GET:
+HTTP Verb **GET**:
 ```java
 /* HTTP verb: GET */
 	case GET:
