@@ -62,14 +62,15 @@ Requirements for this project include an updated _**run.bat**_ script and correc
     Test Suite #|REST API URI|Port #|HTTP Verb|Request Count|User/Thread Count|Request Bodies (.json)|Test Duration|IP Address
     ---|---|---|---|---|---|---|---|---
 
-    _Request Bodies are only required for HTTP Verb: POST_
+    > __Note__ 
+    > _Request Bodies are only required for HTTP Verb: POST. Request Bodies provided for other HTTP Verbs will not be used._
 
     **Example CSV**:
     ```
     1,/some/uri/path,80,GET,10,50,,12.345.67.891
     2,/another/uri/path,443,POST,10,50,postBody.json,12.345.67.891
     ```
-> __Note__ Configuration files must be placed into **src/test/resources** folder within the project or else they cannot be accessed
+> __Warning__ _Configuration files must be placed into **src/test/resources** folder within the project or else they cannot be accessed_
 
 ### Installation
 1. Clone the repo
