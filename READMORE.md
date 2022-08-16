@@ -574,12 +574,6 @@ This directory contains all the resources used within the project.
 - ### run.bat
 	_**run.bat**_ is the batch script on which the project runs and is required for the functionality of this project. For instructions and examples on how to format _**run.bat**_, see [prequisites](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#prerequisites). 
 
-### JRE System Library [JavaSE-1.8]
-
-### Maven Dependencies
-
-### .gitignore
-
 ## Credits
 This tool was developed by **Yuxin Huang**, **Joshua Jerome**, **Kevin Kodama**, and **Edward Xia** under the supervision of **Hadi Abdo**, **Prabhash Krishnan**, and **Thao Pham**. All rights to this project belong to **Dell Technologies** 
 
