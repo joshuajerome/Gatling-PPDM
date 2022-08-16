@@ -33,6 +33,20 @@
 - [Credits](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#credits)
 
 ## Gatling Project
+Gatling PPDM is a sub-project of Asset Microservice Performance Analysis.
+
+#### What is PPDM?
+
+#### A brief overview of Asset Microservice Performance Analysis:
+- Problem Statement:
+  - Assess the performance of the APIs hosted by the APSS microservice running on the PPDM server.
+- Objectives:
+  - Build a performance testing framework for the APSS microservice.
+  - Evaluate throughput, latency, workload efficiency, and response times.
+- Deliverables:
+  - Performance testing framework to simulate users and spin up threads.
+  - Automate load testing for different PPDM APIs.
+  - Configurations are passed as parameters through a CSV file.
 
 ### About Gatling PPDM
 
