@@ -33,6 +33,9 @@
 - [Credits](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#credits)
 
 ## Gatling Project
+
+### About Gatling PPDM
+
 Gatling PPDM is a sub-project of _**Asset Microservice Performance Analysis**_.
 
 #### What is PPDM?
@@ -67,9 +70,6 @@ flowchart LR;
 - Both teams used a shared Git workspace for collaborative source control.
 - JMeter team additionally required the use of git-bash to execute their command line scripts.
 - Both sub-projects were incorporated into the team's Jenkins pipeline.
-
-### About Gatling PPDM
-
 
 ### Project Stucture
 ```
