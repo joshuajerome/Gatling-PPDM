@@ -29,8 +29,6 @@
   - [target](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#target)
     - pom.xml (dependencies)
     - run.bat
-    - test.eml
-    - test.userLibraries
 - [Credits](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#credits)
 
 ## Gatling Project
@@ -551,33 +549,30 @@ This directory contains all the resources used within the project.
 ### target
 
 - ### pom.xml
-_**pom.xml**_ file contains all dependencies for the project. Excluding the requried Maven and Gatling dependency/plugins, this project used GSON dependency and SureFire external plugin.
-```xml
-<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
-<dependency>
-    <groupId>com.google.code.gson</groupId>
-    <artifactId>gson</artifactId>
-    <version>2.8.1</version>
-</dependency>
+	_**pom.xml**_ file contains all dependencies for the project. Excluding the requried Maven and Gatling dependency/plugins, this project used GSON dependency and SureFire external plugin.
+	```xml
+	<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+	<dependency>
+	    <groupId>com.google.code.gson</groupId>
+	    <artifactId>gson</artifactId>
+	    <version>2.8.1</version>
+	</dependency>
 
- <plugin>
-  <groupId>org.apache.maven.plugins</groupId>
-  <artifactId>maven-surefire-plugin</artifactId>
-  <version>3.0.0-M7</version>
-  <configuration>
-	    <forkCount>0</forkCount>
-	    <!--reuseForks>true</reuseForks-->
-	    <!--forkMode>once</forkMode-->
-	    <argLine>-Xmx1024m -XX:MaxPermSize=256m</argLine>
-	  </configuration>
-</plugin>
-```
-To see all dependencies and plugins, see [pom.xml](https://github.com/joshuajerome/Gatling-PPDM/blob/master/pom.xml).
+	 <plugin>
+	  <groupId>org.apache.maven.plugins</groupId>
+	  <artifactId>maven-surefire-plugin</artifactId>
+	  <version>3.0.0-M7</version>
+	  <configuration>
+		    <forkCount>0</forkCount>
+		    <!--reuseForks>true</reuseForks-->
+		    <!--forkMode>once</forkMode-->
+		    <argLine>-Xmx1024m -XX:MaxPermSize=256m</argLine>
+		  </configuration>
+	</plugin>
+	```
+	To see all dependencies and plugins, see [pom.xml](https://github.com/joshuajerome/Gatling-PPDM/blob/master/pom.xml).
 - ### run.bat
 	_**run.bat**_ is the batch script on which the project runs and is required for the functionality of this project. For instructions and examples on how to format _**run.bat**_, see [prequisites](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#prerequisites). 
-- ### test.eml
-
-- ### test.userlibraries
 
 ### JRE System Library [JavaSE-1.8]
 
