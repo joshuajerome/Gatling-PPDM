@@ -156,7 +156,7 @@ This directory contains all Java packages.
 Default package comes with all Gatling projects.  
 
 - #### Engine.java
-	Engine class compiles maven resources and binaries and adds the necessary compenents to their respective directories. This is where the ```main()``` is located, so when Gatling runs, this is essentially what is executed, ```Gatling.fromMap(props.build());``` builds the packages where code is written.
+	**Engine** class compiles maven resources and binaries and adds the necessary compenents to their respective directories. This is where the ```main()``` is located, so when Gatling runs, this is essentially what is executed, ```Gatling.fromMap(props.build());``` builds the packages where code is written.
 	```java
 	import io.gatling.app.Gatling;
 	import io.gatling.core.config.GatlingPropertiesBuilder;
@@ -174,34 +174,47 @@ Default package comes with all Gatling projects.
 	}
 	```
 - #### IDEPathHelper.java
-Reads in gatling and recorder configuration files. These configuration files allow users to customize different criteria that Gatling uses to perfrom tests. Read more in [resources](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#srctestresources).
-```
-public class IDEPathHelper {
-    static final Path mavenSourcesDirectory;
-    static final Path mavenResourcesDirectory;
-    static final Path mavenBinariesDirectory;
-    static final Path resultsDirectory;
-    static final Path recorderConfigFile;
+	Reads in gatling and recorder configuration files. These configuration files allow users to customize different criteria that Gatling uses to perfrom tests. Read more in [resources](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#srctestresources).
+	```java
+	public class IDEPathHelper {
+	    static final Path mavenSourcesDirectory;
+	    static final Path mavenResourcesDirectory;
+	    static final Path mavenBinariesDirectory;
+	    static final Path resultsDirectory;
+	    static final Path recorderConfigFile;
 
-    static {
-        try {
-            Path projectRootDir = Paths.get(IDEPathHelper.class.getClassLoader().getResource("gatling.conf").toURI()).getParent().getParent().getParent();
-            Path mavenTargetDirectory = projectRootDir.resolve("target");
-            Path mavenSrcTestDirectory = projectRootDir.resolve("src").resolve("test");
+	    static {
+		try {
+		    Path projectRootDir = Paths.get(IDEPathHelper.class.getClassLoader().getResource("gatling.conf").toURI()).getParent().getParent().getParent();
+		    Path mavenTargetDirectory = projectRootDir.resolve("target");
+		    Path mavenSrcTestDirectory = projectRootDir.resolve("src").resolve("test");
 
-            mavenSourcesDirectory = mavenSrcTestDirectory.resolve("java");
-            mavenResourcesDirectory = mavenSrcTestDirectory.resolve("resources");
-            mavenBinariesDirectory = mavenTargetDirectory.resolve("test-classes");
-            resultsDirectory = mavenTargetDirectory.resolve("gatling");
-            recorderConfigFile = mavenResourcesDirectory.resolve("recorder.conf");
-        } catch (URISyntaxException e) {
-            throw new ExceptionInInitializerError(e);
-        }
-    }
-}
-```
+		    mavenSourcesDirectory = mavenSrcTestDirectory.resolve("java");
+		    mavenResourcesDirectory = mavenSrcTestDirectory.resolve("resources");
+		    mavenBinariesDirectory = mavenTargetDirectory.resolve("test-classes");
+		    resultsDirectory = mavenTargetDirectory.resolve("gatling");
+		    recorderConfigFile = mavenResourcesDirectory.resolve("recorder.conf");
+		} catch (URISyntaxException e) {
+		    throw new ExceptionInInitializerError(e);
+		}
+	    }
+	}
+	```
 - #### Recorder.java
+	**Recorder** class is nearly identical to **Engine** class, except **Recorder** can be launched from command line, and opens up a very simple GUI.
+	```java
+	public class Recorder {
+	    public static void main(String[] args) {
+		RecorderPropertiesBuilder props = new RecorderPropertiesBuilder()
+			.simulationsFolder(IDEPathHelper.mavenSourcesDirectory.toString())
+			.resourcesFolder(IDEPathHelper.mavenResourcesDirectory.toString())
+			.simulationPackage("testone");
 
+		GatlingRecorder.fromMap(props.build(), Option.<Path> apply(IDEPathHelper.recorderConfigFile));
+	    }
+	}
+	```  
+For the purposes of this project, the Recorder GUI was not used, as the requests made were highly customized. 
 ### testone
 Package created for simulation class development. 
 
