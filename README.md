@@ -12,24 +12,31 @@ Gatling PPDM (Power Protect Data Manager) is a Maven Gatling project that assess
 This project does not require any external dependency download. All dependencies can be found within _**pom.xml**_.
 
 ### Project Stucture
-```bash
+```
 ├── Gatling-PPDM
-│   ├── src
-│   │   ├── main
-│   ├── favicon.ico
-│   ├── images
-│   ├── index.html
-│   ├── js
-│   │   ├── **/*.js
-│   └── partials/template
-├── dist (or build)
-├── node_modules
-├── bower_components (if using bower)
-├── test
-├── Gruntfile.js/gulpfile.js
+│   └──  src
+│       ├── main
+|       |   └── java
+│       └── test
+|           ├── java
+|           |   ├── (default package)
+|           |   └── testone
+|           |       ├── Testing.java
+|           |       ├── TestSuite.java
+|           |       └── CSVReader.java
+|           └── resources
+|                   ├── data.csv
+|                   ├── postBody.json
+|                   ├── gatling.conf
+|                   └── recorder.conf
+├── target
+|   ├── pom.xml
+|   ├── run.bat
+|   ├── test.eml
+|   └── test.userlibraries
+├── JRE System Library [JavaSE-1.8]
+├── Maven Dependencies
 ├── README.md
-├── package.json
-├── bower.json (if using bower)
 └── .gitignore
 ```
 
