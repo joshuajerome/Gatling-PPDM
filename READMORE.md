@@ -33,9 +33,10 @@
 - [Credits](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#credits)
 
 ## Gatling Project
-Gatling PPDM is a sub-project of Asset Microservice Performance Analysis.
+Gatling PPDM is a sub-project of _**Asset Microservice Performance Analysis**_.
 
 #### What is PPDM?
+PPDM stands for Power Protect Data Manager which is a data management service that allows users to manage their backups.
 
 #### A brief overview of Asset Microservice Performance Analysis:
 - Problem Statement:
@@ -48,7 +49,27 @@ Gatling PPDM is a sub-project of Asset Microservice Performance Analysis.
   - Automate load testing for different PPDM APIs.
   - Configurations are passed as parameters through a CSV file.
 
+Gatling (and Jmeter) was one of the researched performance testing tools which seemed to address the objectives and deliverables of the project. Unable to superficially discern which framework was more effecient, a larger project was divided into two subprojects Gatling PPDM and JMeter PPDM. Checkout [JMeter PPDM](https://github.com/yuxinhuang/jmeter-ppdm-maven) here.
+
+Upon extensive testing and POCs (proof of concepts), JMeter appeared to be the right option with respect to the project. Ultimately the goal was to incorporate an automated testing framework with the team's Jenkins pipeline.
+
+- Bash and primarily Java were the two languages used in either project.
+- Both teams used a shared Git workspace for collaborative source control.
+- JMeter team additionally required the use of git-bash to execute their command line scripts.
+
+A simple flow diagram of the project: 
+
+```mermaid
+flowchart LR;
+  A["Java"]-->C["Git"]
+  B["Bash"]-->C["Git"]
+  C["Git"]-->D["JMeter"] & E["Gatling"]
+  D["JMeter"]-->F["Git Bash"]
+  E["Gatling"] & F["Git Bash"]-->G["Jenkins"]
+```
+
 ### About Gatling PPDM
+
 
 ### Project Stucture
 ```
