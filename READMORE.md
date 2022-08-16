@@ -13,13 +13,11 @@
   - [Prerequistites](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#prerequisites)
   - [Installation](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#installation)
   - src/test/java
-    This directory contains all Java packages.
     - [(default package)](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#default-package)
       - Engine.java
       - IDEPathHelper.java
       - Recorder.java
-    - [testone](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#testone)
-      
+    - [testone](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#testone)  
       - Testing.java
       - TestSuite.java
       - CSVReader.java
@@ -147,15 +145,17 @@ git clone https://github.com/joshuajerome/Gatling-PPDM.git
       - _**run.bat**_ script (Windows)
       - _**run.sh**_ script (Mac)
 
-## Diving In
-
 ### src/test/java
+
+### (default package)
+
+This directory contains all Java packages.
 
 - #### Engine.java
 
-- #### Recorder.java
+- #### IDEPathHelper.java
 
-### (default package)
+- #### Recorder.java
 
 ### testone
 
