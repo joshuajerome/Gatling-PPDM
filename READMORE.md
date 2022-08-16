@@ -10,26 +10,26 @@
 - Gatling Project
 - [About Gatling PPDM]()
 - [Project Stucture](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#project-stucture)
-  - [Prerequistites]()
-  - [Installation]()
+  - [Prerequistites](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#prerequisites)
+  - [Installation](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#installation)
   - src/test/java
-    - (default package)
-      - [Engine.java]()
-      - [Recorder.java]()
-    - testone
-      - [Testing.java]()
-      - [TestSuite.java]()
-      - [CSVReader.java]()
-  - src/test/resources
-    - [data.csv]()
-    - [postBody.json]()
-    - [gatling.conf]()
-    - [recorder.conf]() 
-  - target
-    - [pom.xml]()
-    - [run.bat]()
-    - [test.eml]()
-    - [test.userLibraries]()
+    - [(default package)]()
+      - Engine.java
+      - Recorder.java
+    - [testone]()
+      - Testing.java
+      - TestSuite.java
+      - CSVReader.java
+  - [src/test/resources]()
+    - data.csv
+    - postBody.json
+    - gatling.conf
+    - recorder.conf 
+  - [target]()
+    - pom.xml
+    - run.bat
+    - test.eml
+    - test.userLibraries
 - [Credits]()
 
 ## Gatling Project
@@ -117,23 +117,31 @@ git clone https://github.com/joshuajerome/Gatling-PPDM.git
 
 ### testone
 
-- Testing.java
-- TestSuite.java
-- CSVReader.java
+- #### Testing.java
+
+- #### TestSuite.java
+
+- #### CSVReader.java
 
 ### src/test/resources
 
-- data.csv
-- postBody.json
-- gatling.conf
-- recorder.conf
+- #### data.csv
+
+- #### postBody.json
+
+- #### gatling.conf
+
+- #### recorder.conf
 
 ### target
 
-- pom.xml
-- run.bat
-- test.eml
-- test.userlibraries
+- #### pom.xml
+
+- #### run.bat
+
+- #### test.eml
+
+- #### test.userlibraries
 
 ### JRE System Library [JavaSE-1.8]
 
