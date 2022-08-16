@@ -7,9 +7,9 @@
 [![](https://img.shields.io/badge/github-blue?style=for-the-badge)](https://github.com/joshuajerome/Gatling-PPDM)
 
 ### Table of Contents
+- Gatling Project
 - [About Gatling PPDM]()
 - [Project Stucture](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#project-stucture)
-- Gatling Project
   - [Prerequistites]()
   - [Installation]()
   - src/test/java
@@ -31,6 +31,10 @@
     - [test.eml]()
     - [test.userLibraries]()
 - [Credits]()
+
+## Gatling Project
+
+### About Gatling PPDM
 
 ### Project Stucture
 ```
@@ -60,6 +64,7 @@
 ├── README.md
 └── .gitignore
 ```
+
 ### Prerequisites
 Gatling PPDM includes a command line script (_**run.bat**_) to improve its automation capabilities.
 Requirements for this project include an updated _**run.bat**_ script and correctly formatted _**data.csv**_ file (see below).
@@ -103,6 +108,38 @@ git clone https://github.com/joshuajerome/Gatling-PPDM.git
 4. Execute 
       - _**run.bat**_ script (Windows)
       - _**run.sh**_ script (Mac)
+
+## Diving In
+
+### src/test/java
+
+### (default package)
+
+### testone
+
+- Testing.java
+- TestSuite.java
+- CSVReader.java
+
+### src/test/resources
+
+- data.csv
+- postBody.json
+- gatling.conf
+- recorder.conf
+
+### target
+
+- pom.xml
+- run.bat
+- test.eml
+- test.userlibraries
+
+### JRE System Library [JavaSE-1.8]
+
+### Maven Dependencies
+
+### .gitignore
 
 ## Credits
 This tool was developed by **Yuxin Huang**, **Joshua Jerome**, **Kevin Kodama**, and **Edward Xia** under the supervision of **Hadi Abdo**, **Prabhash Krishnan**, and **Thao Pham**. All rights to this project belong to **Dell Technologies** 
