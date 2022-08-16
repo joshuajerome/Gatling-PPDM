@@ -52,9 +52,9 @@ PPDM stands for Power Protect Data Manager which is a data management service th
   - Automate load testing for different PPDM APIs.
   - Configurations are passed as parameters through a CSV file.
 
-Gatling (and Jmeter) was one of the researched performance testing tools which seemed to address the objectives and deliverables of the project. Unable to superficially discern which framework was more effecient, a larger project was divided into two subprojects Gatling PPDM and JMeter PPDM. Checkout [JMeter PPDM](https://github.com/yuxinhuang/jmeter-ppdm-maven) here.
+Gatling (and Jmeter) was one of the researched performance testing tools which seemed to address the objectives and deliverables of the project. Unable to superficially discern which framework was more effecient, a larger project was divided into two subprojects: Gatling PPDM and JMeter PPDM. Checkout [JMeter PPDM](https://github.com/yuxinhuang/jmeter-ppdm-maven) here.
 
-Upon extensive testing and POCs (proof of concepts), JMeter appeared to be the right option with respect to the project. Ultimately the goal was to incorporate an automated testing framework with the team's Jenkins pipeline.
+Upon extensive testing and POCs (proof of concepts), JMeter appeared to be the right option with respect to the project. Ultimately, the goal was to incorporate an automated testing framework with the team's Jenkins pipeline.
 
 A simple flow diagram of the project: 
 
