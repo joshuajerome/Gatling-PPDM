@@ -523,7 +523,7 @@ Ultimately, gatling is packaged with a ```setUp()``` method that takes in a Popu
 _**Confidential**_ --> **PPDM uris are for confidential internal use only.**
 
 ### src/test/resources
-
+This directory contains all the resources used within the project.
 - ### data.csv
 	_**data.csv**_ is the configuration file passed into **CSVReader** and is required for the functionality of this project. For instructions and examples on how to format _**data.csv**_, see [prequisites](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#prerequisites). 
 - ### postBody.json
@@ -547,11 +547,32 @@ _**Confidential**_ --> **PPDM uris are for confidential internal use only.**
 - ### gatling.conf
 	**gatling.conf** is a user-customizable configuration file created by Gatling which offers several customizations. Visit [gatling.conf](https://github.com/joshuajerome/Gatling-PPDM/blob/master/src/test/resources/gatling.conf) to view this file.
 - ### recorder.conf
-	**recorder.conf** is a user-customizable configuration file created by Gatling which offers serveral customizations. Visit [gatling.conf](https://github.com/joshuajerome/Gatling-PPDM/blob/master/src/test/resources/recorder.conf) to view this file.
+	**recorder.conf** is a user-customizable configuration file created by Gatling which offers serveral customizations. Visit [recorder.conf](https://github.com/joshuajerome/Gatling-PPDM/blob/master/src/test/resources/recorder.conf) to view this file.
 ### target
 
 - ### pom.xml
+_**pom.xml**_ file contains all dependencies for the project. Excluding the requried Maven and Gatling dependency/plugins, this project used GSON dependency and SureFire external plugin.
+```xml
+<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+<dependency>
+    <groupId>com.google.code.gson</groupId>
+    <artifactId>gson</artifactId>
+    <version>2.8.1</version>
+</dependency>
 
+ <plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-surefire-plugin</artifactId>
+  <version>3.0.0-M7</version>
+  <configuration>
+	    <forkCount>0</forkCount>
+	    <!--reuseForks>true</reuseForks-->
+	    <!--forkMode>once</forkMode-->
+	    <argLine>-Xmx1024m -XX:MaxPermSize=256m</argLine>
+	  </configuration>
+</plugin>
+```
+To see all dependencies and plugins, see [pom.xml](https://github.com/joshuajerome/Gatling-PPDM/blob/master/pom.xml).
 - ### run.bat
 	_**run.bat**_ is the batch script on which the project runs and is required for the functionality of this project. For instructions and examples on how to format _**run.bat**_, see [prequisites](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#prerequisites). 
 - ### test.eml
