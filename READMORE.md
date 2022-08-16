@@ -249,7 +249,7 @@ enum HTTPMethod {
 }
 ```
 
-For POST requests, TestSuite class allows for two different methods of storing the necessary request body.
+For **POST** requests, TestSuite class allows for two different methods of storing the necessary request body.
 
 1. Base 64 decryption:
 
@@ -449,7 +449,7 @@ HTTP Verb **GET**:
 ```
 **GET** request traditionally do not require a login, as there is no exchange interaction with the tagert API. **GET** requests may fail if the IP/URI is incorrect or a VPN connection is not established for entreprise server APIs.
 
-HTTP Verb POST:
+HTTP Verb **POST**:
 ```java
 case POST:
 					
