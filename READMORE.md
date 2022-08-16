@@ -13,24 +13,24 @@
   - [Prerequistites](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#prerequisites)
   - [Installation](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#installation)
   - src/test/java
-    - [(default package)](https://github.com/joshuajerome/Gatling-PPDM/blob/master)
+    - [(default package)](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#default-package)
       - Engine.java
       - Recorder.java
-    - [testone](https://github.com/joshuajerome/Gatling-PPDM/blob/master)
+    - [testone](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#testone)
       - Testing.java
       - TestSuite.java
       - CSVReader.java
-  - [src/test/resources](https://github.com/joshuajerome/Gatling-PPDM/blob/master)
+  - [src/test/resources](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#srctestresources)
     - data.csv
     - postBody.json
     - gatling.conf
     - recorder.conf 
-  - [target](https://github.com/joshuajerome/Gatling-PPDM/blob/master)
+  - [target](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#target)
     - pom.xml
     - run.bat
     - test.eml
     - test.userLibraries
-- [Credits](https://github.com/joshuajerome/Gatling-PPDM/blob/master)
+- [Credits](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#credits)
 
 ## Gatling Project
 
