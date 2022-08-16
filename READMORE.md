@@ -343,18 +343,113 @@ This function:
 3. performs HTTP requests based on the HTTP verb
 
 Stream:
-```
+```java
 private void runScenarios() {
 	tests.stream().forEach(ts -> { ... }
 }
 ```
 Establish HTTP connection:
-```
+```java
 httpProtocol = HttpDsl.http
 		.baseUrl("https://" + ts.ip)
 		.acceptHeader("application/json")
 		.userAgentHeader("Gatling Performance Test");
 ```
+A switch statement switches on HTTPmethod.
+
+HTTP Verb GET:
+```java
+/* HTTP verb: GET */
+	case GET:
+		/* Initialize GET ChainBuilder with .get() */
+		get = exec(http("HTTP Request: GET")
+				.get(ts.uri.toString())
+				.header("Authorization", session -> session.getString("token_type") 
+						+ " " + session.getString("access_token"))
+				);
+		/* Creates unique scenario for each GET*/
+		getScn = scenario("Test Suite # " 
+						+ ts.id + "::" 
+						+ ts.HTTPmethod
+						+ " "
+						+ ts.uri.toString())
+						.exec(login,get);
+
+		/* Accumulate scenario into Population Builder List*/
+					scnList.add(getScn.injectClosed(rampConcurrentUsers(0).to(ts.requestCount).during(java.time.Duration.ofSeconds(ts.testDuration)))
+.protocols(httpProtocol));
+
+	break;
+```
+HTTP Verb POST:
+```java
+case POST:
+					
+	/* Makes sure that there are unique bodies for each request
+	 */
+	  Iterator<Map<String, Object>> bodyFeeder =
+	  Stream.generate((Supplier<Map<String, Object>>) () -> {
+	      String body = getNewPost(ts.requestBody);
+	      return Collections.singletonMap("body", body);
+	    }
+	  ).iterator();
+
+	  Iterator<Map<String, Object>> authTokenFeeder =
+			  Stream.generate((Supplier<Map<String, Object>>) () -> {
+			      return Collections.singletonMap("token", access_token);
+			    }
+			  ).iterator();
+
+	  /* Get credentials */
+	  try {
+			credentials = getCredentials();
+		} catch (Exception e) {
+			return;
+		}
+```
+```java
+	  /* Create login scenario */
+		loginScn = scenario("Login")
+				.exec(
+			http("login request")
+			.post("*Confidential*")
+			.header("content-type","application/json")
+			.body(StringBody(credentials))
+			.check(jmesPath("access_token").ofString().saveAs("access_token"))
+		    .check(jmesPath("token_type").ofString().saveAs("token_type"))
+			 )
+			.exec(session -> {
+				access_token = session.getString("access_token");
+				token_type = session.getString("token_type");
+			    return session;
+		    });
+```
+```java
+	/* Create post scenario */
+	postScn = scenario("Test Suite # " 
+		+ ts.id + "::" 
+		+ ts.HTTPmethod
+		+ " "
+		+ ts.uri.toString())
+		.repeat(ts.requestCount, "index").on(
+			 feed(bodyFeeder)
+			.feed(authTokenFeeder)
+			.exec(http("HTTP Request: POST")
+				.post(":" + ts.port + ts.restApiUri)
+				.header("Authorization", "bearer" 
+						+ " " + "#{token}")
+				.body(StringBody("#{body}")).asJson()
+				));
+
+	/* Add login scenario and then accumulate post scenarios into Population Builder List */
+	scnList.add(loginScn.injectClosed(constantConcurrentUsers(1).during(java.time.Duration.ofSeconds(1)))
+	  .andThen(
+postScn.injectClosed(rampConcurrentUsers(1).to(ts.threadCount).during((java.time.Duration.ofSeconds(ts.testDuration))))
+	 .protocols(httpProtocol)));
+break;
+}});
+```
+_**Confidential**_ --> **PPDM uris are for confidential internal use only.**
 ### src/test/resources
 
 - ### data.csv
