@@ -53,10 +53,6 @@ Gatling (and Jmeter) was one of the researched performance testing tools which s
 
 Upon extensive testing and POCs (proof of concepts), JMeter appeared to be the right option with respect to the project. Ultimately the goal was to incorporate an automated testing framework with the team's Jenkins pipeline.
 
-- Bash and primarily Java were the two languages used in either project.
-- Both teams used a shared Git workspace for collaborative source control.
-- JMeter team additionally required the use of git-bash to execute their command line scripts.
-
 A simple flow diagram of the project: 
 
 ```mermaid
@@ -67,6 +63,9 @@ flowchart LR;
   D["JMeter"]-->F["Git Bash"]
   E["Gatling"] & F["Git Bash"]-->G["Jenkins"]
 ```
+- Bash and primarily Java were the two languages used in either project.
+- Both teams used a shared Git workspace for collaborative source control.
+- JMeter team additionally required the use of git-bash to execute their command line scripts.
 
 ### About Gatling PPDM
 
