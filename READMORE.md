@@ -8,7 +8,7 @@
 
 ## Further Documentation
 ### Table of Contents
-[Project Stucture]()
+- [Project Stucture](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#project-stucture)
 
 ### Project Stucture
 ```
