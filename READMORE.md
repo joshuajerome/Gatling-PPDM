@@ -145,11 +145,13 @@ git clone https://github.com/joshuajerome/Gatling-PPDM.git
       - _**run.bat**_ script (Windows)
       - _**run.sh**_ script (Mac)
 
+## Packages
+
 ### src/test/java
+This directory contains all Java packages.
 
 ### (default package)
-
-This directory contains all Java packages.
+Default package that comes with all Gatling projects.  
 
 - #### Engine.java
 
@@ -158,6 +160,7 @@ This directory contains all Java packages.
 - #### Recorder.java
 
 ### testone
+Package created for simulation class development. 
 
 - #### Testing.java
 
