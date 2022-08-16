@@ -164,7 +164,7 @@ Default package comes with all Gatling projects.
 ### testone
 Package created for simulation class development. 
 
-- #### TestSuite.java
+- ### TestSuite.java
 
 _**data.csv**_ file is a collection of Test Suites, and each Test Suite has several parameters. This scenario can be viewed object-orientedly by making a TestSuite class and the remaining parameters properties of that class. 
 
@@ -203,10 +203,14 @@ For POST requests, TestSuite class allows for two different methods of storing t
   ```java
       try {
         StringBuilder sb = new StringBuilder();
+	
+	/* pulls resource from project */
         ClassLoader cl = Thread.currentThread().getContextClassLoader();
         InputStream  is = cl.getResourceAsStream(body);	
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
-        String read;
+        
+	/* streams entire request body into a single String */
+	String read;
         try {
           while((read = br.readLine()) != null) {
             sb.append(read);
@@ -221,10 +225,50 @@ For POST requests, TestSuite class allows for two different methods of storing t
         e.printStackTrace();
       }
   ```
+Currently, file reading method is implemented as encrypting a request body within _**data.csv**_ seemed to minutely slow down the automation process.
 
-- #### CSVReader.java
+- ### CSVReader.java
 
-- #### Testing.java
+**CSVReader** streams on _**data.csv**_ and splits the file by lines. Each line is then passed into the **TestSuite** constructor, and all **TestSuite** objects are collected into a list of test suites.
+
+```java
+private static List<TestSuite> tests;
+
+public static List<TestSuite> processFile (String filename) {
+	/* initializes a comma delimeter to traverse comma seperated values */
+	Pattern pattern = Pattern.compile(",");
+	
+	/* pulls resource from project */
+	ClassLoader cl = Thread.currentThread().getContextClassLoader();
+	InputStream  is = cl.getResourceAsStream(filename);
+	
+	try (Stream<String> lines = new BufferedReader(new InputStreamReader(is)).lines()) {
+			tests = lines.map(line -> {
+			String[] arr = pattern.split(line);
+			return new TestSuite(
+				Integer.parseInt(arr[0]),
+				arr[1],
+				Integer.parseInt(arr[2]),
+				HTTPMethod.valueOf(arr[3]),
+				Integer.parseInt(arr[4]),
+				Integer.parseInt(arr[5]),
+				arr[6],
+				Integer.parseInt(arr[7]),
+				arr[8]
+			);
+		}).collect(Collectors.toList());
+			is.close();
+	} catch (Exception e) {
+		System.out.println("Caught exception: " + e.getMessage());
+	}
+	return tests;
+}
+```
+>__Note__ CSVReader works exclusively with the TestSuite constructor.
+
+
+
+- ### Testing.java
 
 ```
 
@@ -232,23 +276,23 @@ For POST requests, TestSuite class allows for two different methods of storing t
 
 ### src/test/resources
 
-- #### data.csv
+- ### data.csv
 
-- #### postBody.json
+- ### postBody.json
 
-- #### gatling.conf
+- ### gatling.conf
 
-- #### recorder.conf
+- ### recorder.conf
 
 ### target
 
-- #### pom.xml
+- ### pom.xml
 
-- #### run.bat
+- ### run.bat
 
-- #### test.eml
+- ### test.eml
 
-- #### test.userlibraries
+- ### test.userlibraries
 
 ### JRE System Library [JavaSE-1.8]
 
