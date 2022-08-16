@@ -73,33 +73,53 @@ flowchart LR;
 - Both sub-projects were incorporated into the team's Jenkins pipeline.
 
 ### Project Stucture
-```
-├── Gatling-PPDM
-│   └──  src
-│       ├── main
-|       |   └── java
-│       └── test
-|           ├── java
-|           |   ├── (default package)
-|           |   └── testone
-|           |       ├── Testing.java
-|           |       ├── TestSuite.java
-|           |       └── CSVReader.java
-|           └── resources
-|                   ├── data.csv
-|                   ├── postBody.json
-|                   ├── gatling.conf
-|                   └── recorder.conf
-├── target
-|   ├── pom.xml
-|   ├── run.bat
-|   ├── test.eml
-|   └── test.userlibraries
-├── JRE System Library [JavaSE-1.8]
-├── Maven Dependencies
-├── README.md
-└── .gitignore
-```
+
+- Tree Diagram
+
+  ```
+  ├── Gatling-PPDM
+  │   └──  src
+  │       ├── main
+  |       |   └── java
+  │       └── test
+  |           ├── java
+  |           |   ├── (default package)
+  |           |   └── testone
+  |           |       ├── Testing.java
+  |           |       ├── TestSuite.java
+  |           |       └── CSVReader.java
+  |           └── resources
+  |                   ├── data.csv
+  |                   ├── postBody.json
+  |                   ├── gatling.conf
+  |                   └── recorder.conf
+  ├── target
+  |   ├── pom.xml
+  |   ├── run.bat
+  |   ├── test.eml
+  |   └── test.userlibraries
+  ├── JRE System Library [JavaSE-1.8]
+  ├── Maven Dependencies
+  ├── README.md
+  └── .gitignore
+  ```
+- Flow Chart Diagram
+  ```mermaid
+  flowchart TD;
+  A["Gatling PPDM"]-->B["src"]
+  A["Gatling PPDM"]-->C["target"]
+  B["src"]-->D["main"]
+  B["src"]-->E["test"]
+  D["main"]-->F["java"]
+  E["test"]-->G["java"]
+  G["Java"]-->H["(default package)"]
+  G["Java"]-->I["testone"]
+  E["test"]-->J["resources"]
+  I["testone"]-->K["Testing.java"]
+  I["testone"]-->L["TestSuite.java"]
+  I["testone"]-->M["CSVReader.java"]
+  J["resources"]
+  ```
 
 ### Prerequisites
 Gatling PPDM includes a command line script (_**run.bat**_) to improve its automation capabilities.
