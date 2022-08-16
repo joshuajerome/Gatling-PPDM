@@ -66,6 +66,7 @@ flowchart LR;
 - Bash and primarily Java were the two languages used in either project.
 - Both teams used a shared Git workspace for collaborative source control.
 - JMeter team additionally required the use of git-bash to execute their command line scripts.
+- Both sub-projects were incorporated into the team's Jenkins pipeline.
 
 ### About Gatling PPDM
 
