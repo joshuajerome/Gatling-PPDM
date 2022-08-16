@@ -355,7 +355,8 @@ httpProtocol = HttpDsl.http
 		.acceptHeader("application/json")
 		.userAgentHeader("Gatling Performance Test");
 ```
-A switch statement switches on HTTPmethod.
+A new HTTP connection is required for each TestSuite. Lack of HTTP Connection results in a [socket timeout exception](https://docs.oracle.com/javase/7/docs/api/java/net/SocketTimeoutException.html).
+A switch statement switches on HTTPmethod for each test suite.
 
 HTTP Verb GET:
 ```java
@@ -373,7 +374,7 @@ HTTP Verb GET:
 						+ ts.HTTPmethod
 						+ " "
 						+ ts.uri.toString())
-						.exec(login,get);
+						.exec(get);
 
 		/* Accumulate scenario into Population Builder List*/
 					scnList.add(getScn.injectClosed(rampConcurrentUsers(0).to(ts.requestCount).during(java.time.Duration.ofSeconds(ts.testDuration)))
@@ -381,6 +382,8 @@ HTTP Verb GET:
 
 	break;
 ```
+**GET** request traditionally do not require a login, as there is no exchange interaction with the tagert API. **GET** requests may fail if the IP/URI is incorrect or a VPN connection is not established for entreprise server APIs.
+
 HTTP Verb POST:
 ```java
 case POST:
@@ -407,6 +410,9 @@ case POST:
 			return;
 		}
 ```
+**POST** requests require a feeder ```.feed()``` to take in a request body and authentication, hence the Iterator feeders above. Unlike **GET** requests, 
+
+**POST** requests require a login request as there is an exchange interaction with the target APIs. Only a single login is required in this model, as simulated users share the same credentials.
 ```java
 	  /* Create login scenario */
 		loginScn = scenario("Login")
@@ -424,6 +430,7 @@ case POST:
 			    return session;
 		    });
 ```
+The login scenario returns a session of saved values, which are sequentially used by the **POST** scenario.
 ```java
 	/* Create post scenario */
 	postScn = scenario("Test Suite # " 
@@ -449,7 +456,18 @@ postScn.injectClosed(rampConcurrentUsers(1).to(ts.threadCount).during((java.time
 break;
 }});
 ```
+A scenario is the actual simulation of users, concurrent users in this model, injected over time. Each _scenario_ is of type PopulationBuilder and are all collected into a PopulationBuilder list.
+
+Ultimately, gatling is packaged with a ```setUp()``` method that takes in a PopulationBuilder or collection of PopulationBuilder. Here, the list of PopulationBuilder is passed as a parameter, and runs on the established HTTP protocol.
+```java
+{
+	runScenarios();	
+	setUp(scnList).protocols(httpProtocol);
+
+}
+```
 _**Confidential**_ --> **PPDM uris are for confidential internal use only.**
+
 ### src/test/resources
 
 - ### data.csv
