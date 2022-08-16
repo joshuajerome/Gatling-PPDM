@@ -13,10 +13,13 @@
   - [Prerequistites](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#prerequisites)
   - [Installation](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#installation)
   - src/test/java
+    This directory contains all Java packages.
     - [(default package)](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#default-package)
       - Engine.java
+      - IDEPathHelper.java
       - Recorder.java
     - [testone](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#testone)
+      
       - Testing.java
       - TestSuite.java
       - CSVReader.java
