@@ -1,1 +1,2 @@
-6,/api/v3/infrastructure-objects,8580,POST,10,500,postBody.json,10,10.235.46.217
+1,/api/v3/infrastructure-objects,8580,POST,10,10,postBody.json,10,10.235.46.217
+2,/api/v3/infrastructure-objects,8580,GET,10,10,,10,10.235.46.217

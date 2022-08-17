@@ -36,11 +36,10 @@ public class Testing extends Simulation {
 	private String token_type = "";
 	private String credentials;
 	private final AtomicInteger counter = new AtomicInteger(1);	
+	private final AtomicInteger loginCounter = new AtomicInteger(1);	
 	
 	/* Builders */
 	private HttpProtocolBuilder httpProtocol;
-	private ChainBuilder get;
-	private ChainBuilder login;
 	private ScenarioBuilder loginScn;
 	private ScenarioBuilder postScn;
 	private ScenarioBuilder getScn;
@@ -127,31 +126,58 @@ public class Testing extends Simulation {
 			switch(ts.HTTPmethod) {
 			
 			/* TODO 
-			 * GET Currently not functional: 
-			 * runs several logins requests
-			 * need to implement bodyFeeder as done in POST case
+			 * Clean up code
 			 */
 			
 			/* HTTP verb: GET */
 				case GET:
 					
-					/* Initialize GET ChainBuilder with .get() */
-					get = exec(http("HTTP Request: GET")
-							.get(ts.uri.toString())
-							.header("Authorization", session -> session.getString("token_type") 
-									+ " " + session.getString("access_token"))
-							);
+					Iterator<Map<String, Object>> authTokenFeederGET =
+					  Stream.generate((Supplier<Map<String, Object>>) () -> {
+					      return Collections.singletonMap("token", access_token);
+					    }
+					  ).iterator();
+					
+					  try {
+							credentials = getCredentials();
+						} catch (Exception e) {
+							return;
+						}
+
+					/* Create login scenario */
+					loginScn = scenario("Login" + loginCounter.getAndIncrement())
+							.exec(
+			    			http("login request")
+			    			.post(":8443/api/v2/login")
+			    			.header("content-type","application/json")
+			    			.body(StringBody(credentials))
+			    			.check(jmesPath("access_token").ofString().saveAs("access_token"))
+			    		    .check(jmesPath("token_type").ofString().saveAs("token_type"))
+			    			 )
+							.exec(session -> {
+								access_token = session.getString("access_token");
+								token_type = session.getString("token_type");
+							    return session;
+					            });
+
 					/* Creates unique scenario for each GET*/
 					getScn = scenario("Test Suite # " 
 									+ ts.id + "::" 
 									+ ts.HTTPmethod
 									+ " "
 									+ ts.uri.toString())
-									.exec(login,get);
+									.repeat(ts.requestCount, "index").on(
+										feed(authTokenFeederGET)
+										.exec(http("HTTP Request: GET")
+											.get(ts.uri.toString())
+											.header("Authorization", "bearer" 
+													+ " " + "#{token}")));
 					
 					/* Accumulate scenario into Population Builder List*/
-					scnList.add(getScn.injectClosed(rampConcurrentUsers(0).to(ts.requestCount).during(java.time.Duration.ofSeconds(ts.testDuration)))
-			         .protocols(httpProtocol));
+					scnList.add(loginScn.injectClosed(constantConcurrentUsers(1).during(java.time.Duration.ofSeconds(1)))
+							  .andThen(
+									  (getScn.injectClosed(rampConcurrentUsers(0).to(ts.requestCount).during(java.time.Duration.ofSeconds(ts.testDuration)))
+										         .protocols(httpProtocol))));
 					
 					break;
 					
@@ -180,7 +206,7 @@ public class Testing extends Simulation {
 						}
 						
 					  /* Create login scenario */
-						loginScn = scenario("Login")
+						loginScn = scenario("Login" + loginCounter.getAndIncrement())
 								.exec(
 				    			http("login request")
 				    			.post(":8443/api/v2/login")
