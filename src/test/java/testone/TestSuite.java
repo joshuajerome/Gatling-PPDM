@@ -1,6 +1,5 @@
 package testone;
 
-import java.awt.datatransfer.SystemFlavorMap;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -15,22 +14,16 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 
-
 /* Can incorporate several HTTP Verbs */
 enum HTTPMethod {
     GET,
-    POST,
-    POSTPOST;
+    POST;
 }
-
-
 
 /* TestSuite Class
 * Decodes PostBody given as Base64 encryption
 * Constructs TestSuite Object with unique CSV fields
 */
-
-
 
 public class TestSuite {
     
@@ -81,11 +74,11 @@ public class TestSuite {
        /* Get postBody via location passed via csv */
         try {
             String[] numBodies = body.split("/");
-            for(int i = 0; i < numBodies.length; i++) {
+            for(String b : numBodies) {
                 
                 StringBuilder sb = new StringBuilder();
                 ClassLoader cl = Thread.currentThread().getContextClassLoader();
-                InputStream  is = cl.getResourceAsStream(numBodies[i]);    
+                InputStream  is = cl.getResourceAsStream(b);    
                 BufferedReader br = new BufferedReader(new InputStreamReader(is));
                 String read;
                 try {

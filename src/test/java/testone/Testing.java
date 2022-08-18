@@ -35,7 +35,6 @@ public class Testing extends Simulation {
 	
 	/* Post Body Variables */
 	private String access_token = null;
-	private String token_type = "";
 	private String secondPostID = null;
 	private String credentials;
 	private final AtomicInteger appHostCounter = new AtomicInteger(1);	
@@ -45,7 +44,8 @@ public class Testing extends Simulation {
 	/* Builders */
 	private HttpProtocolBuilder httpProtocol;
 	private ScenarioBuilder loginScn;
-	private ScenarioBuilder postScn;
+	private ScenarioBuilder firstPostScn;
+	private ScenarioBuilder secondPostScn;
 	private ScenarioBuilder getScn;
 	
 	/* Get File */
@@ -58,8 +58,7 @@ public class Testing extends Simulation {
 		}
 		return datafile;
 	}
-	
-	
+		
 	/* Get Login Credentials */
 	
 	private String getCredentials() throws Exception {
@@ -72,7 +71,32 @@ public class Testing extends Simulation {
 	    		+ "\",\"password\":\"" 
 	    		+ password + "\"}";
 		return credentials;
-	}	
+	}
+	
+	/* login */
+
+	private void login() {
+		  try {
+				credentials = getCredentials();
+			} catch (Exception e) {
+				return;
+			}
+		
+		/* Create login scenario */
+		loginScn = scenario("Login " + loginCounter.getAndIncrement())
+				.exec(
+    			http("login request")
+    			.post(":8443/api/v2/login")
+    			.header("content-type","application/json")
+    			.body(StringBody(credentials))
+    			.check(jmesPath("access_token").ofString().saveAs("access_token"))
+    		    .check(jmesPath("token_type").ofString().saveAs("token_type"))
+    			 )
+				.exec(session -> {
+					access_token = session.getString("access_token");
+				    return session;
+		            });
+	}
 	
 	/* Create New (Unique) Post Body */
 	
@@ -93,8 +117,8 @@ public class Testing extends Simulation {
 				Map<String, String> temp = (Map<String, String>)map;
 				temp.replace("name", "Application Host " + appHostCounter.getAndIncrement());	
 			} else if (map.containsKey("applicationHostRef")) {
-				Map<String, String> agentRef = (Map<String, String>)map.get("applicationHostRef");
-				agentRef.put("id",secondPostID);
+				Map<String, String> applicationHostRef = (Map<String, String>)map.get("applicationHostRef");
+				applicationHostRef.put("id",secondPostID);
 				/* Changes Application Host Name */
 				Map<String, String> temp = (Map<String, String>)map;
 				temp.replace("name", "Application System " + appSysCounter.getAndIncrement());
@@ -117,7 +141,7 @@ public class Testing extends Simulation {
 	 * runs all testing scenarios given via csv config
 	 */
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "static-access" })
 	private void runScenarios() {
 		
 		/* Streams on list of Test Suites */
@@ -129,47 +153,44 @@ public class Testing extends Simulation {
 					.acceptHeader("application/json")
 					.userAgentHeader("Gatling Performance Test");
 			
+			/* Create Feeders */
+		    Iterator<Map<String, Object>> authTokenFeeder =
+				    Stream.generate((Supplier<Map<String, Object>>) () -> {
+				        return Collections.singletonMap("token", access_token);
+				      }
+				    ).iterator();
+		    
+			Iterator<Map<String, Object>> appHostFeeder =
+                    Stream.generate((Supplier<Map<String, Object>>) () -> {
+                        String body = getNewPost(ts.requestBody.get(0));
+                        return Collections.singletonMap("appHostBody", body);
+                      }
+                    ).iterator();
+                    
+            Iterator<Map<String, Object>> appSysFeeder =
+                    Stream.generate((Supplier<Map<String, Object>>) () -> {
+                        String body = ts.requestBody.get(1);
+                        return Collections.singletonMap("appSysBody", body);
+                      }
+                    ).iterator();
+            
+            Iterator<Map<String, Object>> appSysBodyFeeder =
+                    Stream.generate((Supplier<Map<String, Object>>) () -> {
+                    	String appSysBody = getNewPost(ts.requestBody.get(1));
+                        return Collections.singletonMap("appSysBody", appSysBody);
+                      }
+                    ).iterator();
+	
 			/* Switch on HTTP verb 
 			 * Currently only supports GET and POST 
 			 * Other verbs (PUT, DELETE, etc.) can be added via cases
 			 */
-			switch(ts.HTTPmethod) {
 			
-			/* TODO 
-			 * Clean up code
-			 */
+			switch(ts.HTTPmethod) {
 			
 			/* HTTP verb: GET */
 				case GET:
-					
-					Iterator<Map<String, Object>> authTokenFeederGET =
-					  Stream.generate((Supplier<Map<String, Object>>) () -> {
-					      return Collections.singletonMap("token", access_token);
-					    }
-					  ).iterator();
-					
-					  try {
-							credentials = getCredentials();
-						} catch (Exception e) {
-							return;
-						}
-
-					/* Create login scenario */
-					loginScn = scenario("Login" + loginCounter.getAndIncrement())
-							.exec(
-			    			http("login request")
-			    			.post(":8443/api/v2/login")
-			    			.header("content-type","application/json")
-			    			.body(StringBody(credentials))
-			    			.check(jmesPath("access_token").ofString().saveAs("access_token"))
-			    		    .check(jmesPath("token_type").ofString().saveAs("token_type"))
-			    			 )
-							.exec(session -> {
-								access_token = session.getString("access_token");
-								token_type = session.getString("token_type");
-							    return session;
-					            });
-
+					  
 					/* Creates unique scenario for each GET*/
 					getScn = scenario("Test Suite # " 
 									+ ts.id + "::" 
@@ -177,7 +198,7 @@ public class Testing extends Simulation {
 									+ " "
 									+ ts.uri.toString())
 									.repeat(ts.requestCount, "index").on(
-										feed(authTokenFeederGET)
+										feed(authTokenFeeder)
 										.exec(http("HTTP Request: GET")
 											.get(ts.uri.toString())
 											.header("Authorization", "bearer" 
@@ -186,159 +207,59 @@ public class Testing extends Simulation {
 					/* Accumulate scenario into Population Builder List*/
 					scnList.add(loginScn.injectClosed(constantConcurrentUsers(1).during(java.time.Duration.ofSeconds(1)))
 							  .andThen(
-									  (getScn.injectClosed(rampConcurrentUsers(0).to(ts.requestCount).during(java.time.Duration.ofSeconds(ts.testDuration)))
+									  (getScn.injectClosed(rampConcurrentUsers(1).to(ts.requestCount).during(java.time.Duration.ofSeconds(ts.testDuration)))
 										         .protocols(httpProtocol))));
 					
 					break;
 					
 				case POST:
+						
+						/* Create subsequent post scenario */
+						firstPostScn = scenario("Test suite # "
+			                  + ts.id + "::"
+			                  + ts.HTTPmethod
+			                  + " "
+			                  + ts.uri.toString())
+		                  		  .feed(appHostFeeder)
+		                          .feed(appSysFeeder)
+		                          .feed(authTokenFeeder)
+		                          .exec(http("HTTP Request: Original POST")
+		                                  .post(":" + ts.port + ts.restApiUri)
+		                                  .header("Authorization", "bearer"
+		                                          + " " + "#{token}")
+		                                  .body(StringBody("#{appHostBody}")).asJson()
+		                                  .check(jmesPath("agentRef.id").saveAs("secondPostID")))
+		                          .exec(session -> {
+		                        	  secondPostID = session.getString("secondPostID");
+		                        	  return session;
+		                          });
 					
-					/* Makes sure that there are unique bodies for each request */
-					  Iterator<Map<String, Object>> bodyFeeder =
-					  Stream.generate((Supplier<Map<String, Object>>) () -> {
-					      String body = getNewPost(ts.requestBody.get(0));
-					      return Collections.singletonMap("body", body);
-					    }
-					  ).iterator();
-					  
-					  Iterator<Map<String, Object>> authTokenFeeder =
-							  Stream.generate((Supplier<Map<String, Object>>) () -> {
-							      return Collections.singletonMap("token", access_token);
-							    }
-							  ).iterator();
-					  
-					  /* Get credentials */
-					  try {
-							credentials = getCredentials();
-						} catch (Exception e) {
-							return;
-						}
-						
-					  /* Create login scenario */
-						loginScn = scenario("Login" + loginCounter.getAndIncrement())
-								.exec(
-				    			http("login request")
-				    			.post(":8443/api/v2/login")
-				    			.header("content-type","application/json")
-				    			.body(StringBody(credentials))
-				    			.check(jmesPath("access_token").ofString().saveAs("access_token"))
-				    		    .check(jmesPath("token_type").ofString().saveAs("token_type"))
-				    			 )
-								.exec(session -> {
-									access_token = session.getString("access_token");
-									token_type = session.getString("token_type");
-								    return session;
-						            });
-						
-						/* Create post scenario */
-						postScn = scenario("Test Suite # " 
+						/* Create subsequent post scenario */
+						secondPostScn = scenario("Test Suite # " 
 								+ ts.id + "::" 
 								+ ts.HTTPmethod
 								+ " "
 								+ ts.uri.toString())
 								.repeat(ts.requestCount, "index").on(
-										 feed(bodyFeeder)
-										.feed(authTokenFeeder)
-										.exec(http("HTTP Request: POST")
+										 feed(appSysBodyFeeder)
+										 .feed(authTokenFeeder)
+										 .exec(http("HTTP Request: POST")
 												.post(":" + ts.port + ts.restApiUri)
 												.header("Authorization", "bearer" 
 														+ " " + "#{token}")
-												.body(StringBody("#{body}")).asJson()
+												.body(StringBody("#{appSysBody}")).asJson()
 												));
 						
 						/* Add login scenario and then accumulate post scenarios into Population Builder List */
 						scnList.add(loginScn.injectClosed(constantConcurrentUsers(1).during(java.time.Duration.ofSeconds(1)))
 						  .andThen(
-								  postScn.injectClosed(rampConcurrentUsers(1).to(ts.threadCount).during((java.time.Duration.ofSeconds(ts.testDuration))))
-							         .protocols(httpProtocol)));
+								  firstPostScn.injectClosed(constantConcurrentUsers(1).during(java.time.Duration.ofSeconds(1)))
+						  .andThen(
+				        		  secondPostScn.injectClosed(rampConcurrentUsers(1).to(ts.threadCount).during((java.time.Duration.ofSeconds(ts.testDuration))))
+							         .protocols(httpProtocol))
+				        		   ));
 				
 					break;
-					
-				case POSTPOST:
-					
-					Iterator<Map<String, Object>> appHostFeeder =
-                    Stream.generate((Supplier<Map<String, Object>>) () -> {
-                        String body = getNewPost(ts.requestBody.get(0));
-                        return Collections.singletonMap("appHostBody", body);
-                      }
-                    ).iterator();
-                    
-                    Iterator<Map<String, Object>> appSysFeeder =
-                            Stream.generate((Supplier<Map<String, Object>>) () -> {
-                                String body = ts.requestBody.get(1);
-                                return Collections.singletonMap("appSysBody", body);
-                              }
-                            ).iterator();
-                    
-                    Iterator<Map<String, Object>> authTokenFeederPP =
-                            Stream.generate((Supplier<Map<String, Object>>) () -> {
-                                return Collections.singletonMap("token", access_token);
-                              }
-                            ).iterator();
-                    
-                    Iterator<Map<String, Object>> appSysBodyFeeder =
-                            Stream.generate((Supplier<Map<String, Object>>) () -> {
-                            	String appSysBody = getNewPost(ts.requestBody.get(1));
-                                return Collections.singletonMap("appSysBody", appSysBody);
-                              }
-                            ).iterator();
-                    
-					  /* Get credentials */
-					  try {
-							credentials = getCredentials();
-						} catch (Exception e) {
-							return;
-						}
-						
-					  /* Create login scenario */
-						loginScn = scenario("Login" + loginCounter.getAndIncrement())
-								.exec(
-				    			http("login request")
-				    			.post(":8443/api/v2/login")
-				    			.header("content-type","application/json")
-				    			.body(StringBody(credentials))
-				    			.check(jmesPath("access_token").ofString().saveAs("access_token"))
-				    		    .check(jmesPath("token_type").ofString().saveAs("token_type"))
-				    			 )
-								.exec(session -> {
-									access_token = session.getString("access_token");
-									token_type = session.getString("token_type");
-								    return session;
-						            });
-					
-					postScn = scenario("Test Suite # "
-                  + ts.id + "::"
-                  + ts.HTTPmethod
-                  + " "
-                  + ts.uri.toString())
-                  .repeat(ts.requestCount, "index").on(
-                           feed(appHostFeeder)
-                          .feed(appSysFeeder)
-                          .feed(authTokenFeederPP)
-                          .exec(http("HTTP Request: POST")
-                                  .post(":" + ts.port + ts.restApiUri)
-                                  .header("Authorization", "bearer"
-                                          + " " + "#{token}")
-                                  .body(StringBody("#{appHostBody}")).asJson()
-                                  .check(jmesPath("agentRef.id").saveAs("secondPostID")))
-                          .exec(session -> {
-                        	  secondPostID = session.getString("secondPostID");
-//                        	  System.out.println(secondPostID);
-                        	  return session;
-                          })
-                          .feed(appSysBodyFeeder)
-                          .exec(http("HTTP Request: 2nd POST")
-                                  .post(":" + ts.port + ts.restApiUri)
-                                  .header("Authorization", "bearer"
-                                          + " " + "#{token}")
-                                  .body(StringBody("#{appSysBody}")).asJson()
-                                  ));
-					scnList.add(loginScn.injectClosed(constantConcurrentUsers(1).during(java.time.Duration.ofSeconds(1)))
-							  .andThen(
-									  postScn.injectClosed(rampConcurrentUsers(1).to(ts.threadCount).during((java.time.Duration.ofSeconds(ts.testDuration))))
-								         .protocols(httpProtocol)));
-					
-					
 				} // end switch
 			} // end func within steam
 		); // end stream
@@ -346,8 +267,8 @@ public class Testing extends Simulation {
 	
 	/* Runs all scenario within PopulationBuilder list */
 	{
+		login();
 		runScenarios();	
 		setUp(scnList).protocols(httpProtocol);
-		
 	}
 }
