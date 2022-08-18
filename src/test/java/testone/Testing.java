@@ -185,7 +185,7 @@ public class Testing extends Simulation {
 									.header("Authorization", "bearer" 
 											+ " " + "#{token}")));
 					/* Accumulate scenario into Population Builder List*/
-					scnList.add(loginScn.injectOpen(atOnceUsers(1))
+					scnList.add(loginScn.injectClosed(constantConcurrentUsers(1).during(java.time.Duration.ofSeconds(ts.testDuration)))
 						.andThen(
 								(getScn.injectClosed(rampConcurrentUsers(1).to(ts.requestCount).during(java.time.Duration.ofSeconds(ts.testDuration)))
 									.protocols(httpProtocol))));
