@@ -13,19 +13,15 @@ public class CSVReader {
 	/* CSV Reader Class
 	 * Gets file from given location
 	 * Parses file and puts into List of TestSuites
-	 * 
-	 * TODO
-	 * Give PostBody as Base64 encrypted String into CSV File
-	 * CSV reader cannot handle Raw PostBody: conflicts with comma splicing
 	 */
 	
 	private static List<TestSuite> tests;
 	
 	public static List<TestSuite> processFile (String filename) {
 		Pattern pattern = Pattern.compile(",");
-		ClassLoader cl = Thread.currentThread().getContextClassLoader();
-		InputStream  is = cl.getResourceAsStream(filename);	
-		try (Stream<String> lines = new BufferedReader(new InputStreamReader(is)).lines()) {
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		InputStream  inputStream = classLoader.getResourceAsStream(filename);	
+		try (Stream<String> lines = new BufferedReader(new InputStreamReader(inputStream)).lines()) {
 				tests = lines.map(line -> {
 				String[] arr = pattern.split(line);
 				return new TestSuite(
@@ -40,7 +36,7 @@ public class CSVReader {
 					arr[8]
 				);
 			}).collect(Collectors.toList());
-				is.close();
+				inputStream.close();
 		} catch (Exception e) {
 			System.out.println("Caught exception: " + e.getMessage());
 		}

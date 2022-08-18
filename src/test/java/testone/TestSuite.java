@@ -7,8 +7,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Base64;
-
-
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -33,12 +33,13 @@ public class TestSuite {
      HTTPMethod HTTPmethod;
      int requestCount;
      int threadCount;
-     ArrayList<String> requestBody = new ArrayList<String>();
+     String body;
      int testDuration;
      String ip;
      URI uri;
      
-    @SuppressWarnings("null")
+     ArrayList<String> requestBody = new ArrayList<String>();
+     
     TestSuite (int id, String restApiUri, int port, HTTPMethod method, int requestCount, int threadCount, String body, int testDuration, String ip){
         this.id = id;
         this.restApiUri = restApiUri;
@@ -46,6 +47,7 @@ public class TestSuite {
         this.ip = ip;
         this.requestCount = requestCount;
         this.threadCount = threadCount;
+        this.body = body;
         this.HTTPmethod = method;
         this.testDuration = testDuration;
         
@@ -71,32 +73,36 @@ public class TestSuite {
             e.printStackTrace();
          }
 
-       /* Get postBody via location passed via csv */
+       /* Get post bodys from location passed via csv */
         try {
-            String[] numBodies = body.split("/");
-            for(String b : numBodies) {
-                
-                StringBuilder sb = new StringBuilder();
-                ClassLoader cl = Thread.currentThread().getContextClassLoader();
-                InputStream  is = cl.getResourceAsStream(b);    
-                BufferedReader br = new BufferedReader(new InputStreamReader(is));
-                String read;
-                try {
-                    while((read = br.readLine()) != null){
-                        sb.append(read);
-                    }
-                    this.requestBody.add(sb.toString());
-                }
-                catch(Exception e) {
-                        e.printStackTrace();
-                }
-                }
-            }
-        catch(Exception e) {
+            getPostBodies();
+        } catch(Exception e) {
             e.printStackTrace();
         }
    }
-
+    
+    private void getPostBodies() {
+    	String[] arr = this.body.split("/");
+    	for (String file : arr) {
+    		requestBody.add(fileToString(file));
+    	}
+    }
+    
+    private String fileToString(String location) {
+    	StringBuilder stringBuilder = new StringBuilder();
+    	ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+    	InputStream inputStream = classLoader.getResourceAsStream(location);
+    	BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+    	String fileAsString;
+    	try {
+    		while ((fileAsString = bufferedReader.readLine()) != null) {
+    			stringBuilder.append(fileAsString);
+    		}
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	return stringBuilder.toString();
+    }
 
 
    @Override

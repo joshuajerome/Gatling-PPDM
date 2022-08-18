@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-
-
-
    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
         <file>error.log</file>
         <encoder>
@@ -10,18 +7,9 @@
             <immediateFlush>true</immediateFlush>
         </encoder>
     </appender>
-
-
-
    <logger name="io.gatling.http.ahc" level="DEBUG" />
     <logger name="io.gatling.http.response" level="DEBUG" />
-
-
-
    <root level="DEBUG">
         <appender-ref ref="FILE" />
     </root>
-
-
-
 </configuration>

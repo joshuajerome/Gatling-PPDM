@@ -37,9 +37,11 @@ public class Testing extends Simulation {
 	private String access_token = null;
 	private String secondPostID = null;
 	private String credentials;
+	
+	/* Counters */
 	private final AtomicInteger appHostCounter = new AtomicInteger(1);	
 	private final AtomicInteger appSysCounter = new AtomicInteger(1);	
-	private final AtomicInteger loginCounter = new AtomicInteger(1);	
+	private final AtomicInteger loginCounter = new AtomicInteger(1);
 	
 	/* Builders */
 	private HttpProtocolBuilder httpProtocol;
@@ -75,7 +77,7 @@ public class Testing extends Simulation {
 	
 	/* login */
 
-	private void login() {
+	private void login(String specification) {
 		  try {
 				credentials = getCredentials();
 			} catch (Exception e) {
@@ -83,7 +85,7 @@ public class Testing extends Simulation {
 			}
 		
 		/* Create login scenario */
-		loginScn = scenario("Login " + loginCounter.getAndIncrement())
+		loginScn = scenario("Login " + specification)
 				.exec(
     			http("login request")
     			.post(":8443/api/v2/login")
@@ -141,7 +143,6 @@ public class Testing extends Simulation {
 	 * runs all testing scenarios given via csv config
 	 */
 	
-	@SuppressWarnings({ "unchecked", "static-access" })
 	private void runScenarios() {
 		
 		/* Streams on list of Test Suites */
@@ -160,27 +161,6 @@ public class Testing extends Simulation {
 				      }
 				    ).iterator();
 		    
-			Iterator<Map<String, Object>> appHostFeeder =
-                    Stream.generate((Supplier<Map<String, Object>>) () -> {
-                        String body = getNewPost(ts.requestBody.get(0));
-                        return Collections.singletonMap("appHostBody", body);
-                      }
-                    ).iterator();
-                    
-            Iterator<Map<String, Object>> appSysFeeder =
-                    Stream.generate((Supplier<Map<String, Object>>) () -> {
-                        String body = ts.requestBody.get(1);
-                        return Collections.singletonMap("appSysBody", body);
-                      }
-                    ).iterator();
-            
-            Iterator<Map<String, Object>> appSysBodyFeeder =
-                    Stream.generate((Supplier<Map<String, Object>>) () -> {
-                    	String appSysBody = getNewPost(ts.requestBody.get(1));
-                        return Collections.singletonMap("appSysBody", appSysBody);
-                      }
-                    ).iterator();
-	
 			/* Switch on HTTP verb 
 			 * Currently only supports GET and POST 
 			 * Other verbs (PUT, DELETE, etc.) can be added via cases
@@ -188,34 +168,59 @@ public class Testing extends Simulation {
 			
 			switch(ts.HTTPmethod) {
 			
-			/* HTTP verb: GET */
-				case GET:
-					  
+				case GET:	  
+					
+					login("GET" + loginCounter.getAndIncrement());
+					
 					/* Creates unique scenario for each GET*/
 					getScn = scenario("Test Suite # " 
-									+ ts.id + "::" 
-									+ ts.HTTPmethod
-									+ " "
-									+ ts.uri.toString())
-									.repeat(ts.requestCount, "index").on(
-										feed(authTokenFeeder)
-										.exec(http("HTTP Request: GET")
-											.get(ts.uri.toString())
-											.header("Authorization", "bearer" 
-													+ " " + "#{token}")));
-					
+							+ ts.id + "::" 
+							+ ts.HTTPmethod
+							+ " "
+							+ ts.uri.toString())
+							.repeat(ts.requestCount, "index").on(
+								feed(authTokenFeeder)
+								.exec(http("HTTP Request: GET")
+									.get(ts.uri.toString())
+									.header("Authorization", "bearer" 
+											+ " " + "#{token}")));
 					/* Accumulate scenario into Population Builder List*/
-					scnList.add(loginScn.injectClosed(constantConcurrentUsers(1).during(java.time.Duration.ofSeconds(1)))
-							  .andThen(
-									  (getScn.injectClosed(rampConcurrentUsers(1).to(ts.requestCount).during(java.time.Duration.ofSeconds(ts.testDuration)))
-										         .protocols(httpProtocol))));
-					
+					scnList.add(loginScn.injectOpen(atOnceUsers(1))
+						.andThen(
+								(getScn.injectClosed(rampConcurrentUsers(1).to(ts.requestCount).during(java.time.Duration.ofSeconds(ts.testDuration)))
+									.protocols(httpProtocol))));
 					break;
 					
 				case POST:
+					
+					Iterator<Map<String, Object>> appHostFeeder =
+                    Stream.generate((Supplier<Map<String, Object>>) () -> {
+                        String body = getNewPost(ts.requestBody.get(0));
+                        return Collections.singletonMap("appHostBody", body);
+                      }
+                    ).iterator();
+					
+					/* if multiple post bodies */
+					if (ts.requestBody.size() > 1) {     
 						
-						/* Create subsequent post scenario */
-						firstPostScn = scenario("Test suite # "
+						login("POST 1");
+						
+			            Iterator<Map<String, Object>> appSysFeeder =
+			                    Stream.generate((Supplier<Map<String, Object>>) () -> {
+			                        String body = ts.requestBody.get(1);
+			                        return Collections.singletonMap("appSysBody", body);
+			                      }
+			                    ).iterator();
+			            
+			            Iterator<Map<String, Object>> appSysBodyFeeder =
+			                    Stream.generate((Supplier<Map<String, Object>>) () -> {
+			                    	String appSysBody = getNewPost(ts.requestBody.get(1));
+			                        return Collections.singletonMap("appSysBody", appSysBody);
+			                      }
+			                    ).iterator();
+						
+						/* Create initial post scenario */
+						firstPostScn = scenario("Primary POST: Test Suite # "
 			                  + ts.id + "::"
 			                  + ts.HTTPmethod
 			                  + " "
@@ -233,9 +238,8 @@ public class Testing extends Simulation {
 		                        	  secondPostID = session.getString("secondPostID");
 		                        	  return session;
 		                          });
-					
 						/* Create subsequent post scenario */
-						secondPostScn = scenario("Test Suite # " 
+						secondPostScn = scenario("AppSys POST: Test Suite # "
 								+ ts.id + "::" 
 								+ ts.HTTPmethod
 								+ " "
@@ -251,23 +255,45 @@ public class Testing extends Simulation {
 												));
 						
 						/* Add login scenario and then accumulate post scenarios into Population Builder List */
-						scnList.add(loginScn.injectClosed(constantConcurrentUsers(1).during(java.time.Duration.ofSeconds(1)))
+						scnList.add(loginScn.injectOpen(atOnceUsers(1))
 						  .andThen(
-								  firstPostScn.injectClosed(constantConcurrentUsers(1).during(java.time.Duration.ofSeconds(1)))
+								  firstPostScn.injectOpen(atOnceUsers(1))
 						  .andThen(
 				        		  secondPostScn.injectClosed(rampConcurrentUsers(1).to(ts.threadCount).during((java.time.Duration.ofSeconds(ts.testDuration))))
 							         .protocols(httpProtocol))
 				        		   ));
-				
-					break;
-				} // end switch
-			} // end func within steam
-		); // end stream
-	} // end method
+					} else {
+						
+						login("POST 2");
+						
+						firstPostScn = scenario("AppHost POST: Test Suite # "
+								+ ts.id + "::" 
+								+ ts.HTTPmethod
+								+ " "
+								+ ts.uri.toString())
+								.repeat(ts.requestCount, "index").on(
+									 feed(appHostFeeder)
+									.feed(authTokenFeeder)
+									.exec(http("HTTP Request: POST")
+										.post(":" + ts.port + ts.restApiUri)
+										.header("Authorization", "bearer" 
+												+ " " + "#{token}")
+										.body(StringBody("#{appHostBody}")).asJson()
+										));
+
+							/* Add login scenario and then accumulate post scenarios into Population Builder List */
+							scnList.add(loginScn.injectOpen(atOnceUsers(1))
+							  .andThen(
+									  	firstPostScn.injectClosed(rampConcurrentUsers(1).to(ts.threadCount).during((java.time.Duration.ofSeconds(ts.testDuration))))
+										  	.protocols(httpProtocol)));
+					}
+					break; 
+				}});
+		
+	}
 	
 	/* Runs all scenario within PopulationBuilder list */
 	{
-		login();
 		runScenarios();	
 		setUp(scnList).protocols(httpProtocol);
 	}
