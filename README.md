@@ -45,7 +45,7 @@ Requirements for this project include an updated _**run.bat**_ script and correc
     > __Note__ 
     > _Request Body(s) is only required for HTTP Verb: POST. Request Body(s) provided for other HTTP Verbs will not be used._
 
-    ** Request Body Parameters:**
+    **Request Body Parameters:**
     - Given a single (1) request body parameter, Gatling PPDM will update and reuse the same **POST** body for all specfied **POST** requests.
     - For multiple (2) request body paramters, Gatling PPDM will make an initial **POST** using the first request body parameter. Then, will use certain fields from the returned **response body** as a host for the subsequent request body parameter. Gatling PPDM will continue to update and use the second **POST** body for all specified **POST** requests.   
     
