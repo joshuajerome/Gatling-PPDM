@@ -174,7 +174,7 @@ Default package comes with all Gatling projects.
 ### testone
 Package created for simulation class development. 
 
-- ### TestSuite.java
+- ### [TestSuite.java](https://github.com/joshuajerome/Gatling-PPDM/blob/master/src/test/java/testone/TestSuite.java)
 
 _**data.csv**_ file is a collection of Test Suites, and each Test Suite has several parameters. This scenario can be viewed object-orientedly by making a TestSuite class and the remaining parameters properties of that class. 
 
@@ -249,49 +249,16 @@ Currently, the _file reading_ method is implemented as encrypting a request body
 
 [(back to top)](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#gatling-ppdm-further-documentation)
 
-- ### CSVReader.java
+- ### [CSVReader.java](https://github.com/joshuajerome/Gatling-PPDM/blob/master/src/test/java/testone/CSVReader.java)
 
-**CSVReader** streams on _**data.csv**_ and splits the file by lines. Each line is then passed into the **TestSuite** constructor, and all **TestSuite** objects are collected into a list of test suites.
+**CSVReader** streams on _**data.csv**_ and splits the file by lines. Each line is then passed into the **TestSuite** constructor, and all **TestSuite** objects are collected into a list of test suites. This list of test suites is then used in **Testing.java** where all simulation script is written.
 
-```java
-private static List<TestSuite> tests;
-
-public static List<TestSuite> processFile (String filename) {
-	/* initializes a comma delimeter to traverse comma seperated values */
-	Pattern pattern = Pattern.compile(",");
-	
-	/* pulls resource from project */
-	ClassLoader cl = Thread.currentThread().getContextClassLoader();
-	InputStream  is = cl.getResourceAsStream(filename);
-	
-	try (Stream<String> lines = new BufferedReader(new InputStreamReader(is)).lines()) {
-			tests = lines.map(line -> {
-			String[] arr = pattern.split(line);
-			return new TestSuite(
-				Integer.parseInt(arr[0]),
-				arr[1],
-				Integer.parseInt(arr[2]),
-				HTTPMethod.valueOf(arr[3]),
-				Integer.parseInt(arr[4]),
-				Integer.parseInt(arr[5]),
-				arr[6],
-				Integer.parseInt(arr[7]),
-				arr[8]
-			);
-		}).collect(Collectors.toList());
-			is.close();
-	} catch (Exception e) {
-		System.out.println("Caught exception: " + e.getMessage());
-	}
-	return tests;
-}
-```
 >__Note__ CSVReader works exclusively with the TestSuite constructor.
 > To advocate for more parameters in this model, we would need to add a new field to the TestSuite constructor.
 
 [(back to top)](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#gatling-ppdm-further-documentation)
 
-- ### Testing.java
+- ### [Testing.java](https://github.com/joshuajerome/Gatling-PPDM/blob/master/src/test/java/testone/Testing.java)
 
 **Testing** class is where all simulation code is written.
 
@@ -324,47 +291,69 @@ private String getCredentials() throws Exception {
 	return credentials;
 }	
 ```
+These credentials are only used to login, which happens at the start of each **TestSuite** test. Within **login()** method, **getCredentials()** is invoked and the following login scenario is created:
+```java
+	loginScn = scenario("Login " + specification)
+			.exec(
+		http("login request")
+		.post(":8443/api/v2/login")
+		.header("content-type","application/json")
+		.body(StringBody(credentials))
+		.check(jmesPath("access_token").ofString().saveAs("access_token"))
+	    .check(jmesPath("token_type").ofString().saveAs("token_type"))
+		 )
+			.exec(session -> {
+				access_token = session.getString("access_token");
+			    return session;
+		    });
+```
+_specification_ is a parameter taken into the **login()** method and is required since each scenario must have a unique name. Without specification, if there are multiple TestSuite objects, each login request will have the same scenario name, for which Gatling throws a compile time error. 
+
 For **POST** requests specifically, recall that request bodies are necessary. With respect to the APIs hosted by APSS microservice, **POST** request bodies contain an _**agent reference ID**_, a _**natural ID**_, and a _**name**_. **IDs** are stored as UUIDs, and the **name** is stored as a String. Each of these fields must be unique for every **POST** request that hits the PPDM server. Thus, a new request body (or post body) must be generated for each request.
 
-The following code generates a new post body:
+The following code within **getNewPost()** method generates a new post body:
 ```java
-private String getNewPost(String currentPost) {
-	String newPost = "";
-	try {
-		/* Converts JSON File to Java Map using GSON */
-		Gson gson = new Gson();
-		Map<?, ?> map = gson.fromJson(currentPost, Map.class);
 
+	/* Converts JSON File to Java Map using GSON */
+	Gson gson = new Gson();
+	Map<?, ?> map = gson.fromJson(currentPost, Map.class);
+
+	/* picks the post body to replace fields in */
+	if (map.containsKey("agentRef")) {
 		/* Creates unique agent ref ID */
 		Map<String, String> agentRef = (Map<String, String>)map.get("agentRef");
 		agentRef.put("id",UUID.randomUUID().toString());
 
-		/* Creates & replaces unique naturalId */
-		ArrayList<String> naturalIds = (ArrayList<String>)map.get("naturalIds");
-		naturalIds.remove(0);
-		naturalIds.add(UUID.randomUUID().toString());
+		/* Changes Application Host Name */
+		Map<String, String> temp = (Map<String, String>)map;
+		temp.replace("name", "Application Host " + appHostCounter.getAndIncrement());	
+		
+	} else if (map.containsKey("applicationHostRef")) {
+		/* Creates unique agent ref ID */
+		Map<String, String> applicationHostRef = (Map<String, String>)map.get("applicationHostRef");
+		applicationHostRef.put("id",secondPostID);
 
 		/* Changes Application Host Name */
 		Map<String, String> temp = (Map<String, String>)map;
-		temp.replace("name", "Application Host " + counter.getAndIncrement());			
-
-		/* Converts Java Map back to JSON File */
-		newPost = gson.toJson(map);
-		// System.out.println("Agent Id: " + agentRef.get("id") + "\n" + newPost);
-	} catch (Exception e) {
-		e.printStackTrace();
+		temp.replace("name", "Application System " + appSysCounter.getAndIncrement());
 	}
-	return newPost;
-}
+	/* Creates & replaces unique naturalId */
+	ArrayList<String> naturalIds = (ArrayList<String>)map.get("naturalIds");
+	naturalIds.remove(0);
+	naturalIds.add(UUID.randomUUID().toString());
+
+	/* Converts Java Map back to JSON File */
+	newPost = gson.toJson(map);
+
 ```
-The first block of code within the try block introduces the first external dependency used within the project: GSON, a java library created by Google. See [dependencies](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#target) for more on GSON.
+The first block of code introduces the first external dependency used within the project: GSON, a java library created by Google. See [dependencies](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#target) for more on GSON.
 
 **getNewPost()** method is called within a function called **runScenarios**. 
 
 This function:
 1. streams on the list of TestSuite
 2. establishes a HTTP connection to PPDM server
-3. performs HTTP requests based on the HTTP verb
+3. performs a switch on HTTP Verbs to run respective tests
 
 Stream:
 ```java
@@ -379,115 +368,82 @@ httpProtocol = HttpDsl.http
 		.acceptHeader("application/json")
 		.userAgentHeader("Gatling Performance Test");
 ```
+
+Throughout **runScenarios()** method, there are 4 feeders created that feeds a request body and fields within a request body (ex. agentRef.id) to the various HTTP scenarios (**GET**, **POST**). To see these feeders visit [Testing.java](https://github.com/joshuajerome/Gatling-PPDM/blob/master/src/test/java/testone/Testing.java).
+
 A new HTTP connection is required for each **TestSuite**. Lack of HTTP Connection results in a [socket timeout exception](https://docs.oracle.com/javase/7/docs/api/java/net/SocketTimeoutException.html).
 A switch statement switches on HTTPmethod for each test suite.
 
 HTTP Verb **GET**:
 ```java
-/* HTTP verb: GET */
-	case GET:
-		/* Initialize GET ChainBuilder with .get() */
-		get = exec(http("HTTP Request: GET")
-				.get(ts.uri.toString())
-				.header("Authorization", session -> session.getString("token_type") 
-						+ " " + session.getString("access_token"))
-				);
+	login("GET" + loginCounter.getAndIncrement());
+
 		/* Creates unique scenario for each GET*/
 		getScn = scenario("Test Suite # " 
-						+ ts.id + "::" 
-						+ ts.HTTPmethod
-						+ " "
-						+ ts.uri.toString())
-						.exec(get);
-
-		/* Accumulate scenario into Population Builder List*/
-					scnList.add(getScn.injectClosed(rampConcurrentUsers(0).to(ts.requestCount).during(java.time.Duration.ofSeconds(ts.testDuration)))
-.protocols(httpProtocol));
-
-	break;
+				+ ts.id + "::" 
+				+ ts.HTTPmethod
+				+ " "
+				+ ts.uri.toString())
+				.repeat(ts.requestCount, "index").on(
+					feed(authTokenFeeder)
+					.exec(http("HTTP Request: GET")
+						.get(ts.uri.toString())
+						.header("Authorization", "bearer" 
+								+ " " + "#{token}")));
 ```
 **GET** request traditionally do not require a login, as there is no exchange interaction with the tagert API. **GET** requests may fail if the IP/URI is incorrect or a VPN connection is not established for entreprise server APIs.
 
+**POST** requests require a login request as there is an exchange interaction with the target APIs. Only a single login is required in this model, as simulated users share the same credentials.
+
 HTTP Verb **POST**:
 ```java
-case POST:
-					
-	/* Makes sure that there are unique bodies for each request
-	 */
-	  Iterator<Map<String, Object>> bodyFeeder =
-	  Stream.generate((Supplier<Map<String, Object>>) () -> {
-	      String body = getNewPost(ts.requestBody);
-	      return Collections.singletonMap("body", body);
-	    }
-	  ).iterator();
 
-	  Iterator<Map<String, Object>> authTokenFeeder =
-			  Stream.generate((Supplier<Map<String, Object>>) () -> {
-			      return Collections.singletonMap("token", access_token);
-			    }
-			  ).iterator();
-
-	  /* Get credentials */
-	  try {
-			credentials = getCredentials();
-		} catch (Exception e) {
-			return;
-		}
-```
-**POST** requests require a feeder ```.feed()``` to take in a request body and authentication, hence the Iterator feeders above. Unlike **GET** requests, 
-
-**POST** requests require a login request as there is an exchange interaction with the target APIs. Only a single login is required in this model, as simulated users share the same credentials.
-```java
-	  /* Create login scenario */
-		loginScn = scenario("Login")
-				.exec(
-			http("login request")
-			.post("*Confidential*")
-			.header("content-type","application/json")
-			.body(StringBody(credentials))
-			.check(jmesPath("access_token").ofString().saveAs("access_token"))
-		    .check(jmesPath("token_type").ofString().saveAs("token_type"))
-			 )
-			.exec(session -> {
-				access_token = session.getString("access_token");
-				token_type = session.getString("token_type");
-			    return session;
-		    });
-```
-The login scenario returns a session of saved values, which are sequentially used by the **POST** scenario.
-```java
-	/* Create post scenario */
-	postScn = scenario("Test Suite # " 
+login("POST 1");
+/*Creates initial post*/
+firstPostScn = scenario("Primary POST: Test Suite # "
+			  + ts.id + "::"
+			  + ts.HTTPmethod
+			  + " "
+			  + ts.uri.toString())
+				  .feed(appHostFeeder)
+				  .feed(appSysFeeder)
+				  .feed(authTokenFeeder)
+				  .exec(http("HTTP Request: Original POST")
+					  .post(":" + ts.port + ts.restApiUri)
+					  .header("Authorization", "bearer"
+						  + " " + "#{token}")
+					  .body(StringBody("#{appHostBody}")).asJson()
+					  .check(jmesPath("agentRef.id").saveAs("secondPostID")))
+				  .exec(session -> {
+					  secondPostID = session.getString("secondPostID");
+					  return session;
+				  });
+/* Create subsequent post scenario */
+secondPostScn = scenario("AppSys POST: Test Suite # "
 		+ ts.id + "::" 
 		+ ts.HTTPmethod
 		+ " "
 		+ ts.uri.toString())
 		.repeat(ts.requestCount, "index").on(
-			 feed(bodyFeeder)
-			.feed(authTokenFeeder)
-			.exec(http("HTTP Request: POST")
-				.post(":" + ts.port + ts.restApiUri)
-				.header("Authorization", "bearer" 
-						+ " " + "#{token}")
-				.body(StringBody("#{body}")).asJson()
-				));
+			 feed(appSysBodyFeeder)
+			 .feed(authTokenFeeder)
+			 .exec(http("HTTP Request: POST")
+					.post(":" + ts.port + ts.restApiUri)
+					.header("Authorization", "bearer" 
+							+ " " + "#{token}")
+					.body(StringBody("#{appSysBody}")).asJson()
+					));
 
-	/* Add login scenario and then accumulate post scenarios into Population Builder List */
-	scnList.add(loginScn.injectClosed(constantConcurrentUsers(1).during(java.time.Duration.ofSeconds(1)))
-	  .andThen(
-postScn.injectClosed(rampConcurrentUsers(1).to(ts.threadCount).during((java.time.Duration.ofSeconds(ts.testDuration))))
-	 .protocols(httpProtocol)));
-break;
-}});
 ```
 A scenario is the actual simulation of users, concurrent users in this model, injected over time. Each _scenario_ is of type PopulationBuilder and are all collected into a PopulationBuilder list.
+
+The above block of code describes the situation where there are two given **request body** parameters. If there is only one, then only the initial post request is executed and the second **.exec** method is removed as there is no need to save fields from the response body.
 
 Ultimately, gatling is packaged with a ```setUp()``` method that takes in a PopulationBuilder or collection of PopulationBuilder. Here, the list of PopulationBuilder is passed as a parameter, and runs on the established HTTP protocol.
 ```java
 {
 	runScenarios();	
 	setUp(scnList).protocols(httpProtocol);
-
 }
 ```
 _**Confidential**_ --> **PPDM uris are for confidential internal use only.**
