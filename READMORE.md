@@ -209,33 +209,43 @@ For **POST** requests, TestSuite class allows for two different methods of stori
   ```
 2. File Reading:
 
-  Input to _**data.csv**_ request body must be the filename _**and**_ must be located within the _**src/test/resources**_ folder.
+  **getPostBody** and **fileToString** method work in tandem to read and store all given request body locations.
+  
   ```java
-      try {
-        StringBuilder sb = new StringBuilder();
-	
-	/* pulls resource from project */
-        ClassLoader cl = Thread.currentThread().getContextClassLoader();
-        InputStream  is = cl.getResourceAsStream(body);	
-        BufferedReader br = new BufferedReader(new InputStreamReader(is));
-        
-	/* streams entire request body into a single String */
-	String read;
-        try {
-          while((read = br.readLine()) != null) {
-            sb.append(read);
-          }
-        }
-        catch(Exception e) {
-          e.printStackTrace();
-        }
-        this.requestBody = sb.toString();
-      }
-      catch(Exception e) {
-        e.printStackTrace();
-      }
+  private void getPostBody() {
+    	String[] arr = this.body.split("/");
+    	for (String file : arr) {
+    		requestBody.add(fileToString(file));
+    	}
+    }
+    
+    private String fileToString(String location) {
+    	StringBuilder stringBuilder = new StringBuilder();
+    	ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+    	InputStream inputStream = classLoader.getResourceAsStream(location);
+    	BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+    	String fileAsString;
+    	try {
+    		while ((fileAsString = bufferedReader.readLine()) != null) {
+    			stringBuilder.append(fileAsString);
+    		}
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	return stringBuilder.toString();
+    }
   ```
-Currently, file reading method is implemented as encrypting a request body within _**data.csv**_ seemed to minutely slow down the automation process.
+  These functions are then called in the main constructor on the requestBody parameter.
+  
+  Input to _**data.csv**_ request body(s) must be the filename _**and**_ must be located within the _**src/test/resources**_ folder.
+  ```java
+	try {
+            getPostBody();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+  ```
+Currently, the _file reading_ method is implemented as encrypting a request body within _**data.csv**_ seemed to minutely slow down the automation process.
 
 [(back to top)](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#gatling-ppdm-further-documentation)
 
