@@ -34,8 +34,8 @@ Requirements for this project include an updated _**run.bat**_ script and correc
     
     Gatling PPDM project includes two **csv** files (_**data.csv**_ and _**test.csv**_). 
 
-        - _**data.csv**_ contains 7 test suites; 6 **GET** and 1 **POST**. Used for performance testing APIs hosted by APSS microservice. 
-        - _**test.csv**_ contains 3 test suites; 1 **GET** and 2 **POST**. Can be used like **data.csv**, but is primarily used for testing Gatling PPDM code instead. 
+    - _**data.csv**_ contains 7 test suites; 6 **GET** and 1 **POST**. Used for performance testing APIs hosted by APSS microservice. 
+    - _**test.csv**_ contains 3 test suites; 1 **GET** and 2 **POST**. Can be used like **data.csv**, but is primarily used for testing Gatling PPDM code instead. 
     
 - _**data.csv**_ is a configuration file with the following parameters:
 
@@ -46,6 +46,7 @@ Requirements for this project include an updated _**run.bat**_ script and correc
     > _Request Body(s) is only required for HTTP Verb: POST. Request Body(s) provided for other HTTP Verbs will not be used._
 
     **Request Body Parameters:**
+
     - Given a single (1) request body parameter, Gatling PPDM will update and reuse the same **POST** body for all specfied **POST** requests.
     - For multiple (2) request body paramters, Gatling PPDM will make an initial **POST** using the first request body parameter. Then, will use certain fields from the returned **response body** as a host for the subsequent request body parameter. Gatling PPDM will continue to update and use the second **POST** body for all specified **POST** requests.   
     
@@ -64,9 +65,19 @@ git clone https://github.com/joshuajerome/Gatling-PPDM.git
 ```
 2. Open a terminal window
 3. Navigate into the directory where the cloned repo exists
-4. Execute 
-      - _**run.bat**_ script (Windows)
-      - _**run.sh**_ script (Mac)
+4. Execute _**run.bat**_ script
+
+### Results and Debugging
+
+Once _**run.bat**_ finished running, a file location will be printed on the same terminal window. This same file location can be found on the path ```/target/gatling/testing-{time stamp}```. Furthermore, after the test is complete, an **error.log** file is created. **error.log** is the result of 
+**logback-test.xml** whose root level is set to _**debug**_. Due to the large size of **error.log**, this file is ignored in **.gitignore**, and will only be available after a test has been run.  
+
+Again, due to the vast size of **error.log**, the file is overwritten every run. To store the **error.log** of several runs, set the _append_ status to true in **logback-test.xml**.
+
+```xml
+<append>true</append>
+```
+See **[logback.xml](https://github.com/joshuajerome/Gatling-PPDM/blob/master/src/test/resources/logback-test.xml)**.
 
 ## Credits
 This tool was developed by **Yuxin Huang**, **Joshua Jerome**, **Kevin Kodama**, and **Edward Xia** under the supervision of **Hadi Abdo**, **Prabhash Krishnan**, and **Thao Pham**. All rights to this project belong to **Dell Technologies**
