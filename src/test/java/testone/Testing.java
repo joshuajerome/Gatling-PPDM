@@ -115,12 +115,15 @@ public class Testing extends Simulation {
 			if (map.containsKey("agentRef")) {
 				Map<String, String> agentRef = (Map<String, String>)map.get("agentRef");
 				agentRef.put("id",UUID.randomUUID().toString());
+				
 				/* Changes Application Host Name */
 				Map<String, String> temp = (Map<String, String>)map;
 				temp.replace("name", "Application Host " + appHostCounter.getAndIncrement());	
 			} else if (map.containsKey("applicationHostRef")) {
+				
 				Map<String, String> applicationHostRef = (Map<String, String>)map.get("applicationHostRef");
 				applicationHostRef.put("id",secondPostID);
+				
 				/* Changes Application Host Name */
 				Map<String, String> temp = (Map<String, String>)map;
 				temp.replace("name", "Application System " + appSysCounter.getAndIncrement());

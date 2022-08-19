@@ -75,13 +75,13 @@ public class TestSuite {
 
        /* Get post bodys from location passed via csv */
         try {
-            getPostBodies();
+            getPostBody();
         } catch(Exception e) {
             e.printStackTrace();
         }
    }
     
-    private void getPostBodies() {
+    private void getPostBody() {
     	String[] arr = this.body.split("/");
     	for (String file : arr) {
     		requestBody.add(fileToString(file));
