@@ -24,6 +24,7 @@
   - [src/test/resources](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#srctestresources)
     - data.csv
     - postBody.json
+    - logback-test.xml
     - gatling.conf
     - recorder.conf 
   - [target](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#target)
@@ -472,6 +473,8 @@ This directory contains all the resources used within the project.
 	}
 	```
 	>__Note__ the following fields are used within **Testing** class: naturalIds, name, agentRef.
+- ### logback-test.xml 
+	**logback-test.xml** stores all paths that lead to errors in an external file **error.log**. This file rewrites **error.log** each run and is in **.gitignore**. To locate errors, it is helpful to do a narrowed search (ctl + f) in **error.log**. Visit [logback-test.xml](https://github.com/joshuajerome/Gatling-PPDM/blob/master/src/test/resources/logback-test.xml) to view this file.
 - ### gatling.conf
 	**gatling.conf** is a user-customizable configuration file created by Gatling which offers several customizations. Visit [gatling.conf](https://github.com/joshuajerome/Gatling-PPDM/blob/master/src/test/resources/gatling.conf) to view this file.
 - ### recorder.conf
@@ -506,6 +509,20 @@ This directory contains all the resources used within the project.
 	To see all dependencies and plugins, see [pom.xml](https://github.com/joshuajerome/Gatling-PPDM/blob/master/pom.xml).
 - ### run.bat
 	_**run.bat**_ is the batch script on which the project runs and is required for the functionality of this project. For instructions and examples on how to format _**run.bat**_, see [prequisites](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#prerequisites). 
+
+- ### Results and Debugging
+
+	Once _**run.bat**_ finished running, a file location will be printed on the same terminal window. This same file location can be found on the path ```/target/gatling/testing-{time stamp}```. Furthermore, after the test is complete, an **error.log** file is created. **error.log** is the result of 
+	**logback-test.xml** whose root level is set to _**debug**_. Due to the large size of **error.log**, this file is ignored in **.gitignore**, and will only be available after a test has been run.  
+
+	Again, due to the vast size of **error.log**, the file is overwritten every run. To store the **error.log** of several runs, set the _append_ status to true in **logback-test.xml**.
+	
+	Through the performance testing process, three types of errors/exceptions seem to rise in correlation with a large thread/request count:
+	1. 500: netty handler timeout exception
+	2. Handshake timeout exception
+		- Occurs if handshake duration exceeds handshake duration set within **gatling.conf**. Within our tests, the largest recorded handshake timeout is ~22 seconds running 5000 **POST** requests. To avoid this exception, _handshake timeout_ duration is set to 50000 milliseconds in **gatling.conf**.  
+	3. jnc Closed Socket Exception. 
+		- Occurs about 1/50 tests ran. Reason: System forcefully kills connections just after they've been opened. This exception is a bug with Gatling tool and there currently does not seem to be a workaround this exception. 
 
 [(back to top)](https://github.com/joshuajerome/Gatling-PPDM/blob/master/READMORE.md#gatling-ppdm-further-documentation)
 
