@@ -297,7 +297,7 @@ These credentials are only used to login, which happens at the start of each **T
 	loginScn = scenario("Login " + specification)
 			.exec(
 		http("login request")
-		.post(":8443/api/v2/login")
+		.post("**CONFIDENTIAL**")
 		.header("content-type","application/json")
 		.body(StringBody(credentials))
 		.check(jmesPath("access_token").ofString().saveAs("access_token"))
